@@ -7,6 +7,7 @@
 #include <QGeoPositionInfoSource>
 #include <QNmeaPositionInfoSource>
 #include <QPlainTextEdit>
+#include <ggasentence.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,7 +38,7 @@ private:
     QPlainTextEdit *plainText;
     QTimer *mPollTimer;
 
-    bool calculateCheckSum(QString data);
+    int calculateCheckSum(const char* s);
 
 };
 #endif // MAINWINDOW_H

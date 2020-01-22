@@ -100,9 +100,33 @@ void MainWindow::serialReceived()
     QByteArray byteArray;
     while(serial->canReadLine()){
         byteArray = serial->readLine();
+
         QString ba(byteArray);
-         qDebug() << ba;
-        plainText->insertPlainText(ba);
+        QList<QString> strlist = ba.split("*");
+
+        if(!strlist.isEmpty()){
+            strlist[0].remove(0,1);//removing $
+            strlist[1].remove(2,2);//removing line feeds after the data.
+
+            char* firstPart = strlist[0].toUtf8().data();// converting the data in char for calculating the checksum
+
+            int test = calculateCheckSum(firstPart);//result comes in int
+            bool ok;
+            int result = strlist[1].toInt(&ok,16);// converts hex to int
+            if(ok && test == result){
+
+                QList<QString> parts = strlist[0].split(",");
+
+                if(QString::compare(parts[0],"GPGGA") == 0){
+                        GGASentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10]);
+                        qDebug() << sentence.getSentId() << sentence.getFixedDate() << sentence.getLatitude() << sentence.getLongitude() << sentence.getFixQuality() << sentence.getNumberSatallites() << sentence.getHorizontalDilution() << sentence.getAltitude() << sentence.getHeightOfGeoid();
+                }
+                plainText->insertPlainText(ba);
+                //qDebug() << strlist[0] << strlist[1] << "test: " << test;
+            }else{
+                qDebug() << "Invalid data";
+            }
+        }
     }
 
 
@@ -111,9 +135,12 @@ void MainWindow::serialReceived()
     plainText->setTextCursor(c);
 }
 
-bool calculateCheckSum(QString data){
-    QList<QString> packages = data.split("\r\n");
-
+int MainWindow::calculateCheckSum(const char* s){
+    int  c = 0 ;
+    while(*s){
+        c ^= *s++;
+    }
+    return c;
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)

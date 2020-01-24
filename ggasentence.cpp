@@ -10,8 +10,10 @@ GGASentence::GGASentence(QString sentenceIdentifier, QString fixedDate, QString 
 {
     setSentId(sentenceIdentifier);
     setFixedDate(fixedDate);
-    setLatitude(latitude,latDirection);
-    setLongitude(longitude,longDirection);
+    setLatitude(latitude);
+    setLatitudeDirection(latDirection);
+    setLongitude(longitude);
+    setLongitudeDirection(longDirection);
     setFixQuality(fixedQuality);
     setNumberStallites(numberSatallites);
     setHorizontalDilution(horizontalDilution);
@@ -30,7 +32,7 @@ void GGASentence::setSentId(const QString &sentenceIdentifier)
     this->sentenceIdentifier = sentenceIdentifier;
 }
 
-QString GGASentence::getFixedDate() const
+QTime GGASentence::getFixedDate() const
 {
     return this->fixDate;
 }
@@ -39,80 +41,98 @@ void GGASentence::setFixedDate(const QString &fixedDate)
 {
     //qDebug() << fixedDate;
     QTime time = QTime::fromString(fixedDate,"HHmmss.z");
-    this->fixDate = time.toString("HHmmss");
+    this->fixDate = time;
     //qDebug() << time.toString("HHmmss");
 
 }
 
-QString GGASentence::getLatitude() const
+double GGASentence::getLatitude() const
 {
     return this->latitude;
 }
 
-void GGASentence::setLatitude(QString &latitude ,  QString &latDirection)
+void GGASentence::setLatitude(QString &latitude )
 {
-    latitude.append(" " + latDirection);
-    this->latitude = latitude;
+    this->latitude =latitude.toDouble();
 }
 
-QString GGASentence::getLongitude() const
+double GGASentence::getLongitude() const
 {
     return this->longitude;
 }
 
-void GGASentence::setLongitude( QString &longitude,  QString &longDirection)
+void GGASentence::setLongitude( QString &longitude)
 {
-    longitude.append(" "+ longDirection);
-    this->longitude = longitude;
+    this->longitude = longitude.toDouble();
 }
 
-QString GGASentence::getFixQuality() const
+int GGASentence::getFixQuality() const
 {
     return this->fixQuality;
 }
 
 void GGASentence::setFixQuality(const QString &fixQuality)
 {
-    this->fixQuality = fixQuality;
+    this->fixQuality = fixQuality.toInt();
 }
 
-QString GGASentence::getNumberSatallites() const
+int GGASentence::getNumberSatallites() const
 {
     return this->numberSatallites;
 }
 
 void GGASentence::setNumberStallites(const QString &numberSatallites)
 {
-    this->numberSatallites = numberSatallites;
+    this->numberSatallites = numberSatallites.toInt();
 }
 
-QString GGASentence::getHorizontalDilution() const
+double GGASentence::getHorizontalDilution() const
 {
     return this->horizontalDilution;
 }
 
 void GGASentence::setHorizontalDilution(const QString &horizontalDilution)
 {
-    this->horizontalDilution = horizontalDilution;
+    this->horizontalDilution = horizontalDilution.toDouble();
 }
 
-QString GGASentence::getAltitude() const
+double GGASentence::getAltitude() const
 {
     return this->altitude;
 }
 
 void GGASentence::setAltitude(const QString &altitude)
 {
-    this->altitude = altitude;
+    this->altitude = altitude.toDouble();
 }
 
-QString GGASentence::getHeightOfGeoid() const
+double GGASentence::getHeightOfGeoid() const
 {
     return this->heightOfGeoid;
 }
 
 void GGASentence::setHeightOfGeoid(const QString &heightOfGeoid)
 {
-    this->heightOfGeoid = heightOfGeoid;
+    this->heightOfGeoid = heightOfGeoid.toDouble();
+}
+
+QString GGASentence::getLatitudeDirection() const
+{
+    return latitudeDirection;
+}
+
+void GGASentence::setLatitudeDirection(const QString &value)
+{
+    latitudeDirection = value;
+}
+
+QString GGASentence::getLongitudeDirection() const
+{
+    return longitudeDirection;
+}
+
+void GGASentence::setLongitudeDirection(const QString &value)
+{
+    longitudeDirection = value;
 }
 

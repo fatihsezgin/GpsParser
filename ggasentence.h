@@ -25,30 +25,35 @@ public:
     QString getSentId() const;
     void setSentId(const QString &sentenceIdentifier);
 
-    QString getFixedDate() const;
+    QTime getFixedDate() const;
     void setFixedDate(const QString &fixedDate);
 
-    QString getLatitude() const;
-    void setLatitude(QString &latitude,  QString &latDirection);
+    double getLatitude() const;
+    void setLatitude(QString &latitude);
 
-    QString getLongitude() const;
-    void setLongitude( QString &longitude,  QString &longDirection);
+    QString getLatitudeDirection() const;
+    void setLatitudeDirection(const QString &value);
 
-    QString getFixQuality() const;
+    double getLongitude() const;
+    void setLongitude( QString &longitude);
+
+    QString getLongitudeDirection() const;
+    void setLongitudeDirection(const QString &value);
+
+    int getFixQuality() const;
     void setFixQuality(const QString &fixQuality);
 
-    QString getNumberSatallites() const;
+    int getNumberSatallites() const;
     void setNumberStallites(const QString &numberSatallites);
 
-    QString getHorizontalDilution() const;
+    double getHorizontalDilution() const;
     void setHorizontalDilution(const QString &horizontalDilution);
 
-    QString getAltitude() const;
+    double getAltitude() const;
     void setAltitude(const QString &altitude);
 
-    QString getHeightOfGeoid() const;
+    double getHeightOfGeoid() const;
     void setHeightOfGeoid(const QString &heightOfGeoid);
-
 
 
 signals:
@@ -58,14 +63,16 @@ public slots:
 
 private:
     QString sentenceIdentifier;
-    QString fixDate;
-    QString latitude;
-    QString longitude;
-    QString fixQuality;
-    QString numberSatallites;
-    QString horizontalDilution;
-    QString altitude;
-    QString heightOfGeoid;
+    QTime fixDate;
+    double latitude;
+    QString latitudeDirection;
+    double longitude;
+    QString longitudeDirection;
+    int fixQuality;
+    int numberSatallites;
+    double horizontalDilution;
+    double altitude;
+    double heightOfGeoid;
 
 };
 

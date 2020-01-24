@@ -36,11 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
         qDebug() << "Open error";
     }
 
-       /* mPollTimer = new QTimer( this );
+       /*mPollTimer = new QTimer( this );
         mPollTimer->setInterval( 1000 ); //poll every 1 second
         connect( mPollTimer, SIGNAL( timeout() ), this, SLOT( updateSerialData() ) );
-        mPollTimer->start();
-*/
+        mPollTimer->start();*/
+
     qDebug() << serial->isOpen();
     qDebug() << serial->isReadable();
 
@@ -65,9 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::updateSerialData(){
 
         char data[100];
-        if( !serial->bytesAvailable() )
+       /* if( !serial->bytesAvailable() )
           return;
-
+*/
          int   charIdx = 0;
          do
          {
@@ -89,15 +89,89 @@ void MainWindow::updateSerialData(){
          QString a ( data);
          qDebug() << a;
 
+
 }
 
+void MainWindow::processData(QString data)
+{
+    if(data.isEmpty() || !data.contains("\r\n")) return;
 
-static QList<QByteArray> list;
+    QList<QString> parts = data.split("\r\n");
+
+    if(parts.isEmpty())  return;
+
+
+    for(int i = 0; i< parts.size();i++){
+        if(parts[i].isEmpty()){
+                parts.removeAt(i);
+        }else{
+            QList<QString> part = parts[i].split('$');
+
+            if(part.size() >3) return; // big data comes in and when parsing there are more than 3 elements will be in the list
+            for(int j = 0 ; j < part.size();j++){//after splitting by $ the first item is $ so appears a ""
+                if(part[j].isEmpty())
+                    part.removeAt(j);
+            }
+            if(part.size() > 1){
+                part.removeAt(0);
+
+            }
+            //qDebug() <<"part: " << part;
+
+            QList<QString> strList = part[0].split("*");
+
+            if(!strList.isEmpty()){
+                char* firstPart = strList[0].toUtf8().data();// converting the data in char for calculating the checksum
+                int test = calculateCheckSum(firstPart);//result comes in int
+                bool ok;
+                int result = strList[1].toInt(&ok,16);// converts hex to int
+                    if(ok && test == result){
+
+                            QList<QString> parts = strList[0].split(",");
+
+                            if(QString::compare(parts[0],"GPGGA") == 0){
+                                    GGASentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10]);
+                                    qDebug() << sentence.getSentId() << sentence.getFixedDate() << sentence.getLatitude() << sentence.getLatitudeDirection()<< sentence.getLongitude()<< sentence.getLongitudeDirection() << sentence.getFixQuality() << sentence.getNumberSatallites() << sentence.getHorizontalDilution() << sentence.getAltitude() << sentence.getHeightOfGeoid();
+                            }
+                            else if(QString::compare(parts[0],"GPRMC")== 0){
+                                    RMCSentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
+                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getFixDate() << sentence.getStatus() << sentence.getLatitude() << sentence.getLongitude() << sentence.getSpeedOverGround() << sentence.getCourseOverGround() << sentence.getDate() << sentence.getMagneticVariation() << sentence.getModeIndicator() ;
+                            }
+                            //plainText->insertPlainText();
+                            //qDebug() << strlist[0] << strlist[1] << "test: " << test;
+                  }
+            }else{
+                return;
+            }
+        }
+    }
+}
+
 static QString strData;
 
 void MainWindow::serialReceived()
 {
-    QByteArray byteArray;
+    //qDebug() << "received";
+    qint64 bufferSize = serial->bytesAvailable();
+    if(bufferSize > 0){
+        QString data = QString(serial->readAll());
+        strData.append(data);
+        //qDebug() << "data appendleniyor";
+
+        if(strData.endsWith("\n")){
+            //qDebug() << strData;
+            //qDebug() << "\\n ile bitiyor";
+            processData(strData);
+            strData.clear();
+        }else{
+
+        }
+    }else{
+        //qDebug()<<"buffer a data gelmiyor";
+        return;
+    }
+
+    /*QByteArray byteArray;
     while(serial->canReadLine()){
         byteArray = serial->readLine();
 
@@ -131,12 +205,12 @@ void MainWindow::serialReceived()
                 qDebug() << "Invalid data";
             }
         }
-    }
+    }*/
 
 
-    QTextCursor c = plainText->textCursor();
+    /*QTextCursor c = plainText->textCursor();
     c.movePosition(QTextCursor::End);
-    plainText->setTextCursor(c);
+    plainText->setTextCursor(c);*/
 }
 
 int MainWindow::calculateCheckSum(const char* s){

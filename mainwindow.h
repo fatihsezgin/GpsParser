@@ -30,6 +30,8 @@ private slots:
     void updateTimeout(void);
     void error(QGeoPositionInfoSource::Error positioningError);
     void updateSerialData();
+    void processData(QString data);
+
 
 
 private:

@@ -27,25 +27,31 @@ public:
     QString getSentenceIdentifier() const;
     void setSentenceIdentifier(const QString &value);
 
-    QString getFixDate() const;
+    QTime getFixDate() const;
     void setFixDate(const QString &value);
 
     QString getStatus() const;
     void setStatus(const QString &value);
 
-    QString getLatitude() const;
-    void setLatitude( QString &latitude , QString &latitudeDirection );
+    double getLatitude() const;
+    void setLatitude( QString &latitude);
 
-    QString getLongitude() const;
-    void setLongitude( QString &longitude,QString &longitudeDirection );
+    QString getLatitudeDirection() const;
+    void setLatitudeDirection(const QString &value);
 
-    QString getSpeedOverGround() const;
+    double getLongitude() const;
+    void setLongitude( QString &longitude);
+
+    QString getLongitudeDirection() const;
+    void setLongitudeDirection(const QString &value);
+
+    double getSpeedOverGround() const;
     void setSpeedOverGround(const QString &value);
 
-    QString getCourseOverGround() const;
+    double getCourseOverGround() const;
     void setCourseOverGround(const QString &value);
 
-    QString getDate() const;
+    QDate getDate() const;
     void setDate(const QString &value);
 
     QString getMagneticVariation() const;
@@ -54,21 +60,22 @@ public:
     QString getModeIndicator() const;
     void setModeIndicator(const QString &value);
 
+
 signals:
 
 public slots:
 
 private:
     QString sentenceIdentifier;
-    QString fixDate;
+    QTime fixDate;
     QString status;
-    QString latitude;
+    double latitude;
     QString latitudeDirection;
-    QString longitude;
+    double longitude;
     QString longitudeDirection;
-    QString speedOverGround;
-    QString courseOverGround;
-    QString date;
+    double speedOverGround;
+    double courseOverGround;
+    QDate date;
     QString magneticVariation;
     QString magneticVarIndicator;
     QString modeIndicator;

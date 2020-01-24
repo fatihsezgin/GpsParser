@@ -9,8 +9,10 @@ RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixDate,QString stat
     setSentenceIdentifier(sentenceIdentifier);
     setFixDate(fixDate);
     setStatus(status);
-    setLatitude(latitude,latitudeDirection);
-    setLongitude(longitude,longitudeDirection);
+    setLatitude(latitude);
+    setLatitudeDirection(latitudeDirection);
+    setLongitude(longitude);
+    setLongitudeDirection(longitudeDirection);
     setSpeedOverGround(speedOverGround);
     setCourseOverGround(courseOverGround);
     setDate(date);
@@ -28,7 +30,7 @@ void RMCSentence::setSentenceIdentifier(const QString &value)
     sentenceIdentifier = value;
 }
 
-QString RMCSentence::getFixDate() const
+QTime RMCSentence::getFixDate() const
 {
     return this->fixDate;
 }
@@ -36,7 +38,7 @@ QString RMCSentence::getFixDate() const
 void RMCSentence::setFixDate(const QString &value)
 {
     QTime time = QTime::fromString(value,"HHmmss.z");
-    this->fixDate = time.toString("HHmmss");
+    this->fixDate = time;
 }
 
 QString RMCSentence::getStatus() const
@@ -49,58 +51,55 @@ void RMCSentence::setStatus(const QString &value)
     status = value;
 }
 
-QString RMCSentence::getLatitude() const
+double RMCSentence::getLatitude() const
 {
     return latitude;
 }
 
-void RMCSentence::setLatitude( QString &latitude , QString &latitudeDirection )
+void RMCSentence::setLatitude( QString &latitude )
 {
-    latitude.append(" " + latitudeDirection);
-    this->latitude = latitude;
+    this->latitude = latitude.toDouble();
 }
 
-
-
-QString RMCSentence::getLongitude() const
+double RMCSentence::getLongitude() const
 {
     return longitude;
 }
 
-void RMCSentence::setLongitude(QString &longitude,QString &longitudeDirection)
+void RMCSentence::setLongitude(QString &longitude)
 {
-    longitude.append(" "+ longitudeDirection);
-    this->longitude = longitude;
+    this->longitude = longitude.toDouble();
 }
 
-QString RMCSentence::getSpeedOverGround() const
+double RMCSentence::getSpeedOverGround() const
 {
     return speedOverGround;
 }
 
 void RMCSentence::setSpeedOverGround(const QString &value)
 {
-    speedOverGround = value;
+    speedOverGround = value.toDouble();
 }
 
-QString RMCSentence::getCourseOverGround() const
+double RMCSentence::getCourseOverGround() const
 {
     return courseOverGround;
 }
 
 void RMCSentence::setCourseOverGround(const QString &value)
 {
-    courseOverGround = value;
+    courseOverGround = value.toDouble();
 }
 
-QString RMCSentence::getDate() const
+QDate RMCSentence::getDate() const
 {
     return date;
 }
 
 void RMCSentence::setDate(const QString &value)
 {
-    date = value;
+    QDate newDate = QDate::fromString(value,"ddMMyy");
+    date = newDate;
 }
 
 QString RMCSentence::getMagneticVariation() const
@@ -124,6 +123,26 @@ QString RMCSentence::getModeIndicator() const
 void RMCSentence::setModeIndicator(const QString &value)
 {
     modeIndicator = value;
+}
+
+QString RMCSentence::getLatitudeDirection() const
+{
+    return latitudeDirection;
+}
+
+void RMCSentence::setLatitudeDirection(const QString &value)
+{
+    latitudeDirection = value;
+}
+
+QString RMCSentence::getLongitudeDirection() const
+{
+    return longitudeDirection;
+}
+
+void RMCSentence::setLongitudeDirection(const QString &value)
+{
+    longitudeDirection = value;
 }
 
 

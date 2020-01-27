@@ -11,6 +11,9 @@
 #include <rmcsentence.h>
 #include <gllsentence.h>
 #include <vtgsentence.h>
+#include <zdasentence.h>
+#include <gnssentence.h>
+#include <hdtsentence.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

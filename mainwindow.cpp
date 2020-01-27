@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     plainText = ui->plainTextEdit;
 
     serial = new QSerialPort(this);
-    serial->setPortName("ttyUSB2");
+    serial->setPortName("ttyUSB3");
 
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
@@ -143,6 +143,15 @@ void MainWindow::processData(QString data)
                             }else if (QString::compare(parts[0],"GPVTG") == 0){
                                     VTGSentence sentence (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
                                     qDebug() << sentence.getSentenceIdentifier() << sentence.getTrackDegree() << sentence.getTrackReference() << sentence.getTrackDegreeMagnetic() << sentence.getTrackDegreeMagRef() << sentence.getSpeedInKnots() << sentence.getSpeedForKnots() << sentence.getSpeedInKm() << sentence.getSpeedForKm() << sentence.getStatus();
+                            }else if(QString::compare(parts[0],"GPZDA")==0){
+                                    ZDASentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
+                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getUtcTime() << sentence.getDate() << sentence.getLocalZoneHours() << sentence.getLocalZoneMinutes();
+                            }else if(QString::compare(parts[0],"GPGNS")==0){
+                                    GNSSentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
+                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getFixTime() << sentence.getLatitude() << sentence.getLatitudeDirection() << sentence.getLatitudeDirection() << sentence.getLongitude() << sentence.getLongitudeDirection() << sentence.getMode() << sentence.getNumberOfStallites() << sentence.getHDOP() << sentence.getOrthometricHeight() << sentence.getGeoidalSeparation() << sentence.getReferenceStationId();
+                           }else if(QString::compare(parts[0],"GPHDT")==0){
+                                    HDTSentence sentence(parts[0],parts[1],parts[2]);
+                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getDegree() << sentence.getRelative();
                             }
                             //plainText->insertPlainText();
                             //qDebug() << strlist[0] << strlist[1] << "test: " << test;

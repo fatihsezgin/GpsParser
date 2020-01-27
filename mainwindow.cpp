@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     plainText = ui->plainTextEdit;
 
     serial = new QSerialPort(this);
-    serial->setPortName("ttyUSB0");
+    serial->setPortName("ttyUSB2");
+
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
     serial->setParity(QSerialPort::NoParity);
@@ -136,6 +137,9 @@ void MainWindow::processData(QString data)
                             else if(QString::compare(parts[0],"GPRMC")== 0){
                                     RMCSentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
                                     qDebug() << sentence.getSentenceIdentifier() << sentence.getFixDate() << sentence.getStatus() << sentence.getLatitude() << sentence.getLongitude() << sentence.getSpeedOverGround() << sentence.getCourseOverGround() << sentence.getDate() << sentence.getMagneticVariation() << sentence.getModeIndicator() ;
+                            }else if(QString::compare(parts[0],"GPGLL") == 0){
+                                    GLLSentence sentence (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
+                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getLatitude() << sentence.getLatitudeDirection() << sentence.getLongitude() << sentence.getLongitudeDirection() << sentence.getFixTime() << sentence.getStatus();
                             }
                             //plainText->insertPlainText();
                             //qDebug() << strlist[0] << strlist[1] << "test: " << test;

@@ -9,6 +9,7 @@
 #include <QPlainTextEdit>
 #include <ggasentence.h>
 #include <rmcsentence.h>
+#include <gllsentence.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

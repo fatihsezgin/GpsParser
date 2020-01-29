@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTime>
 #include <QDate>
+#include <helper.h>
 class ZDASentence : public QObject
 {
     Q_OBJECT
@@ -16,7 +17,7 @@ public:
     void setSentenceIdentifier(const QString &value);
 
     QTime getUtcTime() const;
-    void setUtcTime(const QString &value);
+    void setUtcTime( QString &value);
 
     QDate getDate() const;
     void setDate(int day, int month, int year);

@@ -2,6 +2,7 @@
 #define HELPER_H
 
 #include <QObject>
+#include <QTime>
 
 class Helper : public QObject
 {
@@ -12,6 +13,7 @@ public:
 signals:
 
 public slots:
+    static QTime getTime(QString &time);
 };
 
 #endif // HELPER_H

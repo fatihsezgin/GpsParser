@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     plainText = ui->plainTextEdit;
 
     serial = new QSerialPort(this);
-    serial->setPortName("ttyUSB2");
+    serial->setPortName("ttyUSB3");
 
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
@@ -132,11 +132,11 @@ void MainWindow::processData(QString data)
 
                             if(QString::compare(parts[0],"GPGGA") == 0){
                                     GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10]);
-                                    qDebug() << s.getSentId() << s.getFixedDate() << s.getLatitude() << s.getLatitudeDirection()<< s.getLongitude()<< s.getLongitudeDirection() << s.getFixQuality() << s.getNumberSatallites() << s.getHorizontalDilution() << s.getAltitude() << s.getHeightOfGeoid();
+                                    qDebug() << s.getSentId() << s.getfixTime() << s.getLatitude() << s.getLatitudeDirection()<< s.getLongitude()<< s.getLongitudeDirection() << s.getFixQuality() << s.getNumberSatallites() << s.getHorizontalDilution() << s.getAltitude() << s.getHeightOfGeoid();
                             }
                             else if(QString::compare(parts[0],"GPRMC")== 0){
                                     RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
-                                    qDebug() << s.getSentenceIdentifier() << s.getFixDate() << s.getStatus() << s.getLatitude() << s.getLongitude() << s.getSpeedOverGround() << s.getCourseOverGround() << s.getDate() << s.getMagneticVariation() << s.getModeIndicator() ;
+                                    qDebug() << s.getSentenceIdentifier() << s.getFixTime() << s.getStatus() << s.getLatitude() << s.getLongitude() << s.getSpeedOverGround() << s.getCourseOverGround() << s.getDate() << s.getMagneticVariation() << s.getModeIndicator() ;
                             }else if(QString::compare(parts[0],"GPGLL") == 0){
                                     GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
                                     qDebug() << s.getSentenceIdentifier() << s.getLatitude() << s.getLatitudeDirection() << s.getLongitude() << s.getLongitudeDirection() << s.getFixTime() << s.getStatus();

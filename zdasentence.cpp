@@ -29,10 +29,10 @@ QTime ZDASentence::getUtcTime() const
     return utcTime;
 }
 
-void ZDASentence::setUtcTime(const QString &value)
+void ZDASentence::setUtcTime( QString &value)
 {
-    QTime time = QTime::fromString(value,"HHmmss.z");
-    this->utcTime = time;
+
+    this->utcTime = Helper::getTime(value);
 }
 
 QDate ZDASentence::getDate() const

@@ -72,10 +72,9 @@ QTime GLLSentence::getFixTime() const
     return fixTime;
 }
 
-void GLLSentence::setFixTime(const QString &value)
+void GLLSentence::setFixTime( QString &value)
 {
-    QTime time = QTime::fromString(value,"HHmmss.z");
-    fixTime = time;
+    this->fixTime = Helper::getTime(value);
 }
 
 QString GLLSentence::getStatus() const

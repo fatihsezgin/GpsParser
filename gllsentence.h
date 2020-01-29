@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <helper.h>
 
 class GLLSentence : public QObject
 {
@@ -28,7 +29,7 @@ public:
     void setLongitudeDirection(const QString &value);
 
     QTime getFixTime() const;
-    void setFixTime(const QString &value);
+    void setFixTime( QString &value);
 
     QString getStatus() const;
     void setStatus(const QString &value);

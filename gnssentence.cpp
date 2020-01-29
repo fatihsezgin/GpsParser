@@ -37,10 +37,10 @@ QTime GNSSentence::getFixTime() const
     return fixTime;
 }
 
-void GNSSentence::setFixTime(const QString &value)
+void GNSSentence::setFixTime(QString &value)
 {
-    QTime time = QTime::fromString(value, "HHmmss.z");
-    fixTime = time;
+
+    this->fixTime = Helper::getTime(value);
 }
 
 double GNSSentence::getLatitude() const

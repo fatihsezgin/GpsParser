@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <helper.h>
 
 class GNSSentence : public QObject
 {
@@ -27,7 +28,7 @@ public:
     void setSentenceIdentifier(const QString &value);
 
     QTime getFixTime() const;
-    void setFixTime(const QString &value);
+    void setFixTime( QString &value);
 
     double getLatitude() const;
     void setLatitude(QString &value);

@@ -6,10 +6,10 @@ GGASentence::GGASentence(QObject *parent) : QObject(parent)
 
 }
 
-GGASentence::GGASentence(QString sentenceIdentifier, QString fixedDate, QString latitude, QString latDirection, QString longitude, QString longDirection, QString fixedQuality, QString numberSatallites, QString horizontalDilution, QString altitude, QString heightOfGeoid)
+GGASentence::GGASentence(QString sentenceIdentifier, QString fixTime, QString latitude, QString latDirection, QString longitude, QString longDirection, QString fixedQuality, QString numberSatallites, QString horizontalDilution, QString altitude, QString heightOfGeoid)
 {
     setSentId(sentenceIdentifier);
-    setFixedDate(fixedDate);
+    setfixTime(fixTime);
     setLatitude(latitude);
     setLatitudeDirection(latDirection);
     setLongitude(longitude);
@@ -32,17 +32,14 @@ void GGASentence::setSentId(const QString &sentenceIdentifier)
     this->sentenceIdentifier = sentenceIdentifier;
 }
 
-QTime GGASentence::getFixedDate() const
+QTime GGASentence::getfixTime() const
 {
-    return this->fixDate;
+    return this->fixTime;
 }
 
-void GGASentence::setFixedDate(const QString &fixedDate)
+void GGASentence::setfixTime(QString &fixedDate)
 {
-    //qDebug() << fixedDate;
-    QTime time = QTime::fromString(fixedDate,"HHmmss.z");
-    this->fixDate = time;
-    //qDebug() << time.toString("HHmmss");
+    this->fixTime = Helper::getTime(fixedDate);
 
 }
 

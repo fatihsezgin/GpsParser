@@ -5,9 +5,9 @@ RMCSentence::RMCSentence(QObject *parent) : QObject(parent)
 
 }
 
-RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixDate,QString status,QString latitude,QString latitudeDirection,QString longitude,QString longitudeDirection,QString speedOverGround,QString courseOverGround,QString date,QString magneticVariation, QString magneticVarIndicator, QString modeIndicator){
+RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixTime,QString status,QString latitude,QString latitudeDirection,QString longitude,QString longitudeDirection,QString speedOverGround,QString courseOverGround,QString date,QString magneticVariation, QString magneticVarIndicator, QString modeIndicator){
     setSentenceIdentifier(sentenceIdentifier);
-    setFixDate(fixDate);
+    setFixTime(fixTime);
     setStatus(status);
     setLatitude(latitude);
     setLatitudeDirection(latitudeDirection);
@@ -30,15 +30,14 @@ void RMCSentence::setSentenceIdentifier(const QString &value)
     sentenceIdentifier = value;
 }
 
-QTime RMCSentence::getFixDate() const
+QTime RMCSentence::getFixTime() const
 {
-    return this->fixDate;
+    return this->fixTime;
 }
 
-void RMCSentence::setFixDate(const QString &value)
+void RMCSentence::setFixTime(QString &value)
 {
-    QTime time = QTime::fromString(value,"HHmmss.z");
-    this->fixDate = time;
+    this->fixTime = Helper::getTime(value);
 }
 
 QString RMCSentence::getStatus() const

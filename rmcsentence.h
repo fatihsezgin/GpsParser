@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <helper.h>
 
 class RMCSentence : public QObject
 {
@@ -27,8 +28,8 @@ public:
     QString getSentenceIdentifier() const;
     void setSentenceIdentifier(const QString &value);
 
-    QTime getFixDate() const;
-    void setFixDate(const QString &value);
+    QTime getFixTime() const;
+    void setFixTime(QString &value);
 
     QString getStatus() const;
     void setStatus(const QString &value);
@@ -67,7 +68,7 @@ public slots:
 
 private:
     QString sentenceIdentifier;
-    QTime fixDate;
+    QTime fixTime;
     QString status;
     double latitude;
     QString latitudeDirection;

@@ -2,7 +2,8 @@
 #define GGASENTENCE_H
 
 #include <QObject>
-#include <QDateTime>
+#include <QTime>
+#include <helper.h>
 
 class GGASentence : public QObject
 {
@@ -10,7 +11,7 @@ class GGASentence : public QObject
 public:
     explicit GGASentence(QObject *parent = nullptr);
      GGASentence(QString sentenceIdentifier,
-                 QString fixedDate,
+                 QString fixTime,
                  QString latitude,
                  QString latDirection,
                  QString longitude,
@@ -25,8 +26,8 @@ public:
     QString getSentId() const;
     void setSentId(const QString &sentenceIdentifier);
 
-    QTime getFixedDate() const;
-    void setFixedDate(const QString &fixedDate);
+    QTime getfixTime() const;
+    void setfixTime( QString &fixTime);
 
     double getLatitude() const;
     void setLatitude(QString &latitude);
@@ -63,7 +64,7 @@ public slots:
 
 private:
     QString sentenceIdentifier;
-    QTime fixDate;
+    QTime fixTime;
     double latitude;
     QString latitudeDirection;
     double longitude;

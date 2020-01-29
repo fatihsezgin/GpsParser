@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     plainText = ui->plainTextEdit;
 
     serial = new QSerialPort(this);
-    serial->setPortName("ttyUSB3");
+    serial->setPortName("ttyUSB2");
 
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setDataBits(QSerialPort::Data8);
@@ -131,27 +131,46 @@ void MainWindow::processData(QString data)
                             QList<QString> parts = strList[0].split(",");
 
                             if(QString::compare(parts[0],"GPGGA") == 0){
-                                    GGASentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10]);
-                                    qDebug() << sentence.getSentId() << sentence.getFixedDate() << sentence.getLatitude() << sentence.getLatitudeDirection()<< sentence.getLongitude()<< sentence.getLongitudeDirection() << sentence.getFixQuality() << sentence.getNumberSatallites() << sentence.getHorizontalDilution() << sentence.getAltitude() << sentence.getHeightOfGeoid();
+                                    GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10]);
+                                    qDebug() << s.getSentId() << s.getFixedDate() << s.getLatitude() << s.getLatitudeDirection()<< s.getLongitude()<< s.getLongitudeDirection() << s.getFixQuality() << s.getNumberSatallites() << s.getHorizontalDilution() << s.getAltitude() << s.getHeightOfGeoid();
                             }
                             else if(QString::compare(parts[0],"GPRMC")== 0){
-                                    RMCSentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getFixDate() << sentence.getStatus() << sentence.getLatitude() << sentence.getLongitude() << sentence.getSpeedOverGround() << sentence.getCourseOverGround() << sentence.getDate() << sentence.getMagneticVariation() << sentence.getModeIndicator() ;
+                                    RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getFixDate() << s.getStatus() << s.getLatitude() << s.getLongitude() << s.getSpeedOverGround() << s.getCourseOverGround() << s.getDate() << s.getMagneticVariation() << s.getModeIndicator() ;
                             }else if(QString::compare(parts[0],"GPGLL") == 0){
-                                    GLLSentence sentence (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getLatitude() << sentence.getLatitudeDirection() << sentence.getLongitude() << sentence.getLongitudeDirection() << sentence.getFixTime() << sentence.getStatus();
+                                    GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getLatitude() << s.getLatitudeDirection() << s.getLongitude() << s.getLongitudeDirection() << s.getFixTime() << s.getStatus();
                             }else if (QString::compare(parts[0],"GPVTG") == 0){
-                                    VTGSentence sentence (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getTrackDegree() << sentence.getTrackReference() << sentence.getTrackDegreeMagnetic() << sentence.getTrackDegreeMagRef() << sentence.getSpeedInKnots() << sentence.getSpeedForKnots() << sentence.getSpeedInKm() << sentence.getSpeedForKm() << sentence.getStatus();
+                                    VTGSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getTrackDegree() << s.getTrackReference() << s.getTrackDegreeMagnetic() << s.getTrackDegreeMagRef() << s.getSpeedInKnots() << s.getSpeedForKnots() << s.getSpeedInKm() << s.getSpeedForKm() << s.getStatus();
                             }else if(QString::compare(parts[0],"GPZDA")==0){
-                                    ZDASentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getUtcTime() << sentence.getDate() << sentence.getLocalZoneHours() << sentence.getLocalZoneMinutes();
+                                    ZDASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getUtcTime() << s.getDate() << s.getLocalZoneHours() << s.getLocalZoneMinutes();
                             }else if(QString::compare(parts[0],"GPGNS")==0){
-                                    GNSSentence sentence(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getFixTime() << sentence.getLatitude() << sentence.getLatitudeDirection() << sentence.getLatitudeDirection() << sentence.getLongitude() << sentence.getLongitudeDirection() << sentence.getMode() << sentence.getNumberOfStallites() << sentence.getHDOP() << sentence.getOrthometricHeight() << sentence.getGeoidalSeparation() << sentence.getReferenceStationId();
+                                    GNSSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getFixTime() << s.getLatitude() << s.getLatitudeDirection() << s.getLatitudeDirection() << s.getLongitude() << s.getLongitudeDirection() << s.getMode() << s.getNumberOfStallites() << s.getHDOP() << s.getOrthometricHeight() << s.getGeoidalSeparation() << s.getReferenceStationId();
                            }else if(QString::compare(parts[0],"GPHDT")==0){
-                                    HDTSentence sentence(parts[0],parts[1],parts[2]);
-                                    qDebug() << sentence.getSentenceIdentifier() << sentence.getDegree() << sentence.getRelative();
+                                    HDTSentence s(parts[0],parts[1],parts[2]);
+                                    qDebug() << s.getSentenceIdentifier() << s.getDegree() << s.getRelative();
+                            }else if(QString::compare(parts[0],"GPGSA")==0){
+                                    QList<int> list;
+                                       for(int i = 3 ; i <= 14 ; i++){
+                                            list.append(parts[i].toInt());
+                                      }
+                                       GSASentence s (parts[0],parts[1],parts[2],list,parts[15],parts[16],parts[17]);
+                                       qDebug()  << s.getSentenceIdentifier() << s.getMode() << s.getFix() << s.getIds() << s.getPDOP() << s.getHDOP() << s.getVDOP();
+                            }else if(QString::compare(parts[0],"GPGSV") == 0){
+                                        //qDebug() << parts;
+                                         QList<GSVDetail*> list;
+                                         GSVDetail *detail;
+                                        for(int i = 8 ; i < 20 ; i+=4 ){                                               
+                                                 detail = new GSVDetail(parts[i],parts[i+1],parts[i+2],parts[i+3]);
+                                                 list.append(detail);
+                                         }
+                                        GSVSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],list);
+                                        qDebug() << s.getTotalMessageNum() << s.getMessageNumber()  << s.getTotalNumberSatallites() << s.getSatallitePrnNumber() << s.getElevationDegree() << s.getAzimuthDegree() << s.getSNR() << s.getSvlist();
+
+
                             }
                             //plainText->insertPlainText();
                             //qDebug() << strlist[0] << strlist[1] << "test: " << test;

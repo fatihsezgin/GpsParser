@@ -14,6 +14,11 @@ ZDASentence::ZDASentence(QString sentenceIdentifier, QString utcTime, QString da
     setLocalZoneMinutes(localZoneMinutes.toInt());
 }
 
+QString ZDASentence::toString()
+{
+    return QString(this->getSentenceIdentifier() + " " + this->getUtcTime().toString() + " "+ this->getDate().toString() + " "+ QString::number(this->getLocalZoneHours())+ " "+ QString::number(this->getLocalZoneMinutes())+ "\n");
+}
+
 QString ZDASentence::getSentenceIdentifier() const
 {
     return sentenceIdentifier;
@@ -65,3 +70,5 @@ void ZDASentence::setLocalZoneMinutes(int value)
 {
     localZoneMinutes = value;
 }
+
+

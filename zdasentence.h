@@ -28,6 +28,8 @@ public:
     int getLocalZoneMinutes() const;
     void setLocalZoneMinutes(int value);
 
+    QString toString();
+
 signals:
 
 public slots:

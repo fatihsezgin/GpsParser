@@ -40,6 +40,8 @@ public:
     QList<GSVDetail*> getSvlist() ;
     void setSvlist(  QList<GSVDetail*> &value);
 
+    QString toString();
+
 private:
     QString sentenceIdentifier;
     int totalMessageNum;

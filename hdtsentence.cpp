@@ -41,3 +41,8 @@ void HDTSentence::setRelative(const QString &value)
 {
     relative = value;
 }
+
+QString HDTSentence::toString()
+{
+    return QString(this->getSentenceIdentifier() + " " + QString::number(this->getDegree()) + " " + this->getRelative()+ "\n");
+}

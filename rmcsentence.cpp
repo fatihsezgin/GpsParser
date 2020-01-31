@@ -124,6 +124,11 @@ void RMCSentence::setModeIndicator(const QString &value)
     modeIndicator = value;
 }
 
+QString RMCSentence::toString()
+{
+    return (this->sentenceIdentifier + " " +this->getFixTime().toString()+ " "+this->getStatus()+" " + QString::number(this->getLatitude())+ " " + this->getLatitudeDirection()+ " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection()+ " "  + QString::number(this->speedOverGround)+ " "  + QString::number(this->courseOverGround)+ " "  + this->date.toString()+ " "  + this->getMagneticVariation()+ " "  +this->getModeIndicator()+ "\n");
+}
+
 QString RMCSentence::getLatitudeDirection() const
 {
     return latitudeDirection;

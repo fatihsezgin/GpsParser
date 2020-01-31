@@ -18,6 +18,18 @@ GSVSentence::GSVSentence(QString sentenceIdentifier, QString totalMessageNum, QS
     setSvlist(svlist);
 }
 
+
+QString GSVSentence::toString()
+{
+    QString satalliteListInString;
+    for(int i = 0 ; i< this->getSvlist().size(); i++){
+           satalliteListInString.append(QString::number(this->getSvlist().at(i)->getSvPrnNumber()) + " " +QString::number(this->getSvlist().at(i)->getElevationDegree()) + " " + QString::number(this->getSvlist().at(i)->getAzimuthDegree()) + " "+QString::number(this->getSvlist().at(i)->getSNR()));
+    }
+
+    return QString(this->getSentenceIdentifier() + " " + QString::number(this->getTotalMessageNum()) + " " + QString::number(this->getTotalMessageNum()) + "  " + QString::number(this->getSatallitePrnNumber())+ " " + QString::number(this->getElevationDegree()) + " " + QString::number(this->getAzimuthDegree()) + " " +QString::number(this->getSNR())+" " + satalliteListInString + "\n");
+
+}
+
 QString GSVSentence::getSentenceIdentifier()
 {
     return sentenceIdentifier;
@@ -97,6 +109,7 @@ void GSVSentence::setSvlist( QList<GSVDetail*> &list)
 {
     svlist = list;
 }
+
 
 int GSVSentence::getTotalMessageNum() const
 {

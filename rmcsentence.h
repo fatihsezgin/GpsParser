@@ -61,6 +61,8 @@ public:
     QString getModeIndicator() const;
     void setModeIndicator(const QString &value);
 
+    QString toString();
+
 
 signals:
 

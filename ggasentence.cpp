@@ -113,6 +113,11 @@ void GGASentence::setHeightOfGeoid(const QString &heightOfGeoid)
     this->heightOfGeoid = heightOfGeoid.toDouble();
 }
 
+QString GGASentence::toString()
+{
+    return (this->sentenceIdentifier +" "+this->getfixTime().toString() + " "+  QString::number(this->getLatitude()) +" " +this->getLatitudeDirection()+" " + QString::number(this->getLongitude())+" " + this->getLongitudeDirection()+" " + QString::number(this->getFixQuality())+" " + QString::number(this->getNumberSatallites())+" " + QString::number(this->getHorizontalDilution())+" " + QString::number(this->getAltitude())+" " + QString::number(this->getHeightOfGeoid())+"\n");
+}
+
 QString GGASentence::getLatitudeDirection() const
 {
     return latitudeDirection;

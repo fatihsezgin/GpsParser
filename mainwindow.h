@@ -3,10 +3,12 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
-#include <QGeoPositionInfo>
-#include <QGeoPositionInfoSource>
-#include <QNmeaPositionInfoSource>
+#include <QMetaEnum>
+#include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QComboBox>
 #include <ggasentence.h>
 #include <rmcsentence.h>
 #include <gllsentence.h>
@@ -17,6 +19,8 @@
 #include <gsasentence.h>
 #include <gsvdetail.h>
 #include <gsvsentence.h>
+#include <QStringLiteral>
+#include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,21 +38,19 @@ public:
 private slots:
     void serialReceived();
     void handleError(QSerialPort::SerialPortError error);
-    void positionUpdated(QGeoPositionInfo positionInfo);
-    void updateTimeout(void);
-    void error(QGeoPositionInfoSource::Error positioningError);
-    void updateSerialData();
     void processData(QString data);
-
-
+    bool openSerialPort();
+    bool closeSerialPort();
+    void initCheckBoxes();
+    void sendCommand();
 
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
-    QNmeaPositionInfoSource *nmeaSource;
     QPlainTextEdit *plainText;
-    QTimer *mPollTimer;
-
+    QLineEdit *lEditCommand;
+    QComboBox *cboxPortName,*cboxBaudRate,*cboxDataBits, *cboxParity,*cboxStopBits,*cboxFlowControl;
+    QPushButton *btnOpenPort, *btnClosePort,*btnSendCommand;
     int calculateCheckSum(const char* s);
 
 };

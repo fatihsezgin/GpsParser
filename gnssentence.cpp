@@ -22,6 +22,13 @@ GNSSentence::GNSSentence(QString sentenceIdentifier, QString fixTime, QString la
 
 }
 
+
+QString GNSSentence::toString()
+{
+    return QString(this->getSentenceIdentifier() + " " + this->getFixTime().toString() + " " + QString::number(this->getLatitude()) + " " + this->getLatitudeDirection() + " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection() + " " + this->getMode() + " " + QString::number(this->getNumberOfStallites()) + " " +QString::number( this->getHDOP())+ " " +QString::number(this->getOrthometricHeight()) + " " +QString::number(this->getGeoidalSeparation())+ " " +QString::number(this->getReferenceStationId())+"\n") ;
+}
+
+
 QString GNSSentence::getSentenceIdentifier() const
 {
     return sentenceIdentifier;
@@ -152,3 +159,4 @@ void GNSSentence::setReferenceStationId(QString &value)
 {
     referenceStationID = value.toInt();
 }
+

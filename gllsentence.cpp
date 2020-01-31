@@ -16,6 +16,11 @@ GLLSentence::GLLSentence(QString sentenceIdentifer, QString latitude, QString la
     setStatus(status);
 }
 
+QString GLLSentence::toString()
+{
+    return QString(this->getSentenceIdentifier()+ " " + QString::number(this->getLatitude()) + " "+ this->getLatitudeDirection() + " "+ QString::number(this->getLongitude()) + " "+this->getLongitudeDirection() + " "+ this->fixTime.toString() + " "+ this->getStatus()+ "\n");
+}
+
 QString GLLSentence::getSentenceIdentifier() const
 {
     return sentenceIdentifier;
@@ -86,3 +91,5 @@ void GLLSentence::setStatus(const QString &value)
 {
     status = value;
 }
+
+

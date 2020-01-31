@@ -2,6 +2,7 @@
 #define GSASENTENCE_H
 
 #include <QObject>
+#include <QDebug>
 
 class GSASentence : public QObject
 {
@@ -31,6 +32,8 @@ public:
 
     double getVDOP() const;
     void setVDOP(QString &value);
+
+    QString toString();
 
 signals:
 

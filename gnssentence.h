@@ -63,6 +63,8 @@ public:
     int getReferenceStationId() const;
     void setReferenceStationId(QString &value);
 
+    QString toString();
+
 signals:
 
 public slots:

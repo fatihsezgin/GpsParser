@@ -34,6 +34,8 @@ public:
     QString getStatus() const;
     void setStatus(const QString &value);
 
+    QString toString();
+
 signals:
 
 public slots:

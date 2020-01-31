@@ -20,6 +20,8 @@ public:
     QString getRelative() const;
     void setRelative(const QString &value);
 
+    QString toString();
+
 signals:
 
 public slots:

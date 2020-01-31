@@ -56,6 +56,7 @@ public:
     double getHeightOfGeoid() const;
     void setHeightOfGeoid(const QString &heightOfGeoid);
 
+    QString toString();
 
 signals:
 

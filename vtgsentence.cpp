@@ -19,6 +19,11 @@ VTGSentence::VTGSentence(QString sentenceIdentifier, QString trackDegree, QStrin
     setStatus(status);
 }
 
+QString VTGSentence::toString()
+{
+    return  QString(this->getSentenceIdentifier() + " " +  QString::number(this->getTrackDegree())+ " "+ this->getTrackReference() + " "+  QString::number(this->getTrackDegreeMagnetic()) + " " + this->getTrackDegreeMagRef() + " "+  QString::number(this->getSpeedInKnots()) +" " + this->getSpeedForKnots() + " "+ QString::number(this->getSpeedInKm()) + " " + this->getSpeedForKm()+ " "+ this->getStatus() +"\n" );
+}
+
 QString VTGSentence::getSentenceIdentifier() const
 {
     return sentenceIdentifier;
@@ -118,3 +123,5 @@ void VTGSentence::setStatus(const QString &value)
 {
     status = value;
 }
+
+

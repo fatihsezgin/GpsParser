@@ -53,7 +53,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *btnOpenPort;
     QPushButton *btnClosePort;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label_4;
     QLineEdit *lEditCommand;
@@ -169,23 +169,23 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
-        widget = new QWidget(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(290, 310, 561, 27));
-        horizontalLayout_2 = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(centralwidget);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(290, 310, 561, 27));
+        horizontalLayout_2 = new QHBoxLayout(layoutWidget);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_4 = new QLabel(widget);
+        label_4 = new QLabel(layoutWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
         horizontalLayout_2->addWidget(label_4);
 
-        lEditCommand = new QLineEdit(widget);
+        lEditCommand = new QLineEdit(layoutWidget);
         lEditCommand->setObjectName(QString::fromUtf8("lEditCommand"));
 
         horizontalLayout_2->addWidget(lEditCommand);
 
-        btnSendCommand = new QPushButton(widget);
+        btnSendCommand = new QPushButton(layoutWidget);
         btnSendCommand->setObjectName(QString::fromUtf8("btnSendCommand"));
 
         horizontalLayout_2->addWidget(btnSendCommand);

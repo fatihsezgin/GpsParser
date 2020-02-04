@@ -32,34 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     initCheckBoxes();
 
-
     serial = new QSerialPort(this);
-
-    /* serial->setPortName("ttyUSB3");
-    serial->setBaudRate(QSerialPort::Baud9600);
-    serial->setDataBits(QSerialPort::Data8);
-    serial->setParity(QSerialPort::NoParity);
-    serial->setStopBits(QSerialPort::OneStop);
-    serial->setFlowControl(QSerialPort::NoFlowControl);
-    if(serial->open(QIODevice::ReadOnly)){
-        qDebug() << "connected";
-    } else{
-        qDebug() << serial->errorString();
-        qDebug() << "Open error";
-    }
-
-
-    qDebug() << serial->isOpen();
-    qDebug() << serial->isReadable();*/
 
     connect(serial,&QSerialPort::readyRead,this,&MainWindow::serialReceived);
     connect(btnOpenPort,&QPushButton::clicked, this,&MainWindow::openSerialPort);
     connect(btnClosePort,&QPushButton::clicked,this,&MainWindow::closeSerialPort);
     connect(btnSendCommand,&QPushButton::clicked,this,&MainWindow::sendCommand);
 
-
 }
-
 
 void MainWindow::processData(QString data)
 {
@@ -69,7 +49,6 @@ void MainWindow::processData(QString data)
     QList<QString> parts = data.split("\r\n");
 
     if(parts.isEmpty())  return;
-
 
     for(int i = 0; i< parts.size();i++){
         if(parts[i].isEmpty()){
@@ -92,55 +71,51 @@ void MainWindow::processData(QString data)
 
             if(!strList.isEmpty()){
                 char* firstPart = strList[0].toUtf8().data();// converting the data in char for calculating the checksum
-                int test = calculateCheckSum(firstPart);//result comes in int
+                int test = Helper::calculateCheckSum(firstPart);//result comes in int
                 bool ok;
                 int result = strList[1].toInt(&ok,16);// converts hex to int
                 if(ok && test == result){
 
                     QList<QString> parts = strList[0].split(",");
 
-                    if(QString::compare(parts[0],"GPGGA") == 0){
+                    if(parts[0].contains("GGA")){
                         GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[11]);
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
                     }
-                    else if(QString::compare(parts[0],"GPRMC")== 0){
+                    else if(parts[0].contains("RMC")){
                         RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
-                    }else if(QString::compare(parts[0],"GPGLL") == 0){
+                    }else if(parts[0].contains("GLL")){
                         GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
-                        //qDebug() << s.getSentenceIdentifier() << s.getLatitude() << s.getLatitudeDirection() << s.getLongitude() << s.getLongitudeDirection() << s.getFixTime() << s.getStatus();
-                    }else if (QString::compare(parts[0],"GPVTG") == 0){
+                    }else if (parts[0].contains("VTG")){
                         VTGSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
-
-                        //                        qDebug() << s.getSentenceIdentifier() << s.getTrackDegree() << s.getTrackReference() << s.getTrackDegreeMagnetic() << s.getTrackDegreeMagRef() << s.getSpeedInKnots() << s.getSpeedForKnots() << s.getSpeedInKm() << s.getSpeedForKm() << s.getStatus();
-                    }else if(QString::compare(parts[0],"GPZDA")==0){
+                    }else if(parts[0].contains("ZDA")){
                         ZDASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
-                        //                        qDebug() << s.getSentenceIdentifier() << s.getUtcTime() << s.getDate() << s.getLocalZoneHours() << s.getLocalZoneMinutes();
-                    }else if(QString::compare(parts[0],"GPGNS")==0){
+
+                    }else if(parts[0].contains("GNS")){
                         GNSSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
-                        //qDebug() << s.getSentenceIdentifier() << s.getFixTime() << s.getLatitude() << s.getLatitudeDirection() << s.getLatitudeDirection() << s.getLongitude() << s.getLongitudeDirection() << s.getMode() << s.getNumberOfStallites() << s.getHDOP() << s.getOrthometricHeight() << s.getGeoidalSeparation() << s.getReferenceStationId();
                         qDebug() << s.toString();
                         plainText->insertPlainText(s.toString());
-                    }else if(QString::compare(parts[0],"GPHDT")==0){
+                    }else if(parts[0].contains("HDT")){
                         HDTSentence s(parts[0],parts[1],parts[2]);
                         qDebug() << s.getSentenceIdentifier() << s.getDegree() << s.getRelative();
-                    }else if(QString::compare(parts[0],"GPGSA")==0){
+                    }else if(parts[0].contains("GSA")){
                         QList<int> list;
                         for(int i = 3 ; i <= 14 ; i++){
                             list.append(parts[i].toInt());
                         }
                         GSASentence s (parts[0],parts[1],parts[2],list,parts[15],parts[16],parts[17]);
-                        //plainText->insertPlainText(s.toString());
+                        plainText->insertPlainText(s.toString());
                         qDebug()  << s.toString();
-                    }else if(QString::compare(parts[0],"GPGSV") == 0){
+                    }else if(parts[0].contains("GSV")){
                         //qDebug() << parts.size();
                         QList<GSVDetail*> list;
                         GSVDetail *detail;
@@ -152,10 +127,11 @@ void MainWindow::processData(QString data)
                                 list.append(detail);
                             }
                             GSVSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],list);
-                            //qDebug() << s.getTotalMessageNum() << s.getMessageNumber()  << s.getTotalNumberSatallites() << s.getSatallitePrnNumber() << s.getElevationDegree() << s.getAzimuthDegree() << s.getSNR() << s.getSvlist();
                             qDebug() << s.toString();
                             plainText->insertPlainText(s.toString());
                         }
+                    }else if(parts[0].contains("PMTK")){
+                            PMTKSentence s (parts,this);
                     }
                 }
             }else{
@@ -177,8 +153,9 @@ bool MainWindow::openSerialPort()
     serial->setFlowControl(static_cast<QSerialPort::FlowControl>(cboxFlowControl->currentText().toInt()));
     if(serial->open(QIODevice::ReadWrite)){
         qDebug() << "connected";
-        btnOpenPort->setEnabled(false);
-        btnOpenPort->setStyleSheet("background-color: rgb(0,255,0)");
+        disableSerialPortSettings();
+
+
     } else{
         qDebug() << serial->errorString();
         QMessageBox::information(this,"Error",serial->errorString());
@@ -195,6 +172,7 @@ bool MainWindow::closeSerialPort()
 {
     if(serial->isOpen()){
         serial->close();
+        enableSerialPortSettings();
         btnOpenPort->setEnabled(true);
         btnOpenPort->setStyleSheet("");
         QApplication::processEvents();
@@ -242,13 +220,17 @@ void MainWindow::initCheckBoxes()
 
 void MainWindow::sendCommand()
 {
-    QString cmdFromGUI = lEditCommand->text();
-    qDebug() << cmdFromGUI;
-    char *cmdChar = cmdFromGUI.toUtf8().data();
-    int checksum = calculateCheckSum(cmdChar);
 
-    QString hex = QString("%1").arg(checksum,2,16,QLatin1Char('0'));
-    qDebug() << hex;
+    if(!serial->isOpen()){
+        QMessageBox::information(this,"Serial Port Closed", "Please open serial port!");
+        return;
+    }
+
+    QString cmdFromGUI = lEditCommand->text();// Get command from user.
+    //qDebug() << cmdFromGUI;
+    //char *cmdChar = cmdFromGUI.toUtf8().data();
+    int checksum = Helper::calculateCheckSum(cmdFromGUI.toUtf8().data()); // for calculating the checksum checksum is converted into char *;
+    QString hex = QString("%1").arg(checksum,2,16,QLatin1Char('0'));//checksum returns an integer but in the sentence we need as a hex number.
 
 
     QString cmdToSend= "";
@@ -256,13 +238,10 @@ void MainWindow::sendCommand()
     cmdToSend.append(cmdFromGUI);
     cmdToSend.append("*");
     cmdToSend.append(hex);
-    cmdToSend.append(QChar(13));
-    cmdToSend.append(QChar(10));
+    cmdToSend.append(QChar(13));// < CR>
+    cmdToSend.append(QChar(10));// <LF>
 
     //cmdToSend = "$PMTK314,-1*04\r\n";
-
-    qDebug() <<"yollanacak"<< cmdToSend;
-    qDebug() <<"yollanacak byte array"<< cmdToSend.toLocal8Bit();
 
     qDebug() << "serial is writable " << serial->isWritable();
     qDebug() <<  serial->write(cmdToSend.toLocal8Bit(),cmdToSend.size());
@@ -270,6 +249,34 @@ void MainWindow::sendCommand()
     serial->flush();
 
 }
+
+void MainWindow::enableSerialPortSettings()
+{
+    btnOpenPort->setStyleSheet("");
+    btnOpenPort->setEnabled(true);
+    cboxParity->setEnabled(true);
+    cboxBaudRate ->setEnabled(true);
+    cboxDataBits->setEnabled(true);
+    cboxPortName->setEnabled(true);
+    cboxStopBits->setEnabled(true);
+    cboxFlowControl ->setEnabled(true);
+}
+
+void MainWindow::disableSerialPortSettings()
+{
+    btnOpenPort->setStyleSheet("background-color: rgb(0,255,0)");
+    btnOpenPort->setEnabled(false);
+    cboxParity->setEnabled(false);
+    cboxBaudRate ->setEnabled(false);
+    cboxDataBits->setEnabled(false);
+    cboxPortName->setEnabled(false);
+    cboxStopBits->setEnabled(false);
+    cboxFlowControl ->setEnabled(false);
+    QApplication::processEvents();
+
+}
+
+
 
 static QString strData;
 
@@ -282,30 +289,17 @@ void MainWindow::serialReceived()
     if(bufferSize > 0){
         QString data = QString(serial->readAll());
         strData.append(data);
-        //qDebug() << "strData" + strData;
-        //qDebug() << "data appendleniyor";
-
+        qDebug() << strData;
         if(strData.endsWith("\n")){
-            //qDebug() << strData;
-            //qDebug() << "\\n ile bitiyor";
+            //qDebug() << __PRETTY_FUNCTION__<<   strData;
             processData(strData);
             strData.clear();
-        }else{
-
         }
     }else{
-        //qDebug()<<"buffer a data gelmiyor";
         return;
     }
 }
 
-int MainWindow::calculateCheckSum(const char* s){
-    int  c = 0 ;
-    while(*s){
-        c ^= *s++;
-    }
-    return c;
-}
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
 {

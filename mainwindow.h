@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <ggasentence.h>
+#include <pmtksentence.h>
 #include <rmcsentence.h>
 #include <gllsentence.h>
 #include <vtgsentence.h>
@@ -34,7 +35,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
 private slots:
     void serialReceived();
     void handleError(QSerialPort::SerialPortError error);
@@ -43,6 +43,9 @@ private slots:
     bool closeSerialPort();
     void initCheckBoxes();
     void sendCommand();
+    void enableSerialPortSettings();
+    void disableSerialPortSettings();
+
 
 private:
     Ui::MainWindow *ui;
@@ -51,7 +54,7 @@ private:
     QLineEdit *lEditCommand;
     QComboBox *cboxPortName,*cboxBaudRate,*cboxDataBits, *cboxParity,*cboxStopBits,*cboxFlowControl;
     QPushButton *btnOpenPort, *btnClosePort,*btnSendCommand;
-    int calculateCheckSum(const char* s);
+
 
 };
 #endif // MAINWINDOW_H

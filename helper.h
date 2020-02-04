@@ -14,6 +14,7 @@ signals:
 
 public slots:
     static QTime getTime(QString &time);
+    static int calculateCheckSum(const char* s);
 };
 
 #endif // HELPER_H

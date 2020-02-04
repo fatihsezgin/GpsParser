@@ -11,3 +11,13 @@ QTime Helper::getTime(QString &time)
     QTime result = QTime::fromString(trimmedTime,"HHmmss");
     return result;
 }
+
+int Helper::calculateCheckSum(const char *s)
+{
+    int  c = 0 ;
+    while(*s){
+        c ^= *s++;
+    }
+    return c;
+
+}

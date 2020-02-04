@@ -1,9 +1,11 @@
 #ifndef PMTKSENTENCE_H
 #define PMTKSENTENCE_H
 
+#include <helper.h>
 #include <QObject>
 #include <QDebug>
 #include <QMessageBox>
+
 
 class PMTKSentence : public QObject
 {
@@ -13,7 +15,7 @@ public:
     PMTKSentence(QList<QString> sentence ,QWidget *parent);
     enum PacketType{
         TestPacket = 0,
-        Ack =1,
+        Acknowledgement=1,
         SystemMessage = 10,
         TextMessage = 11,
         HotStart = 101,
@@ -22,44 +24,44 @@ public:
         FullColdStart = 104,
         ClearEpo = 127,
         StandbyMode = 161,
-        LocusQueryStatus = 183,
-        LocusEraseFlash = 184,
-        LocusStopLogger = 185,
-        LocusLogNow = 186,
-        LocusConfig=187,
+        Locus_Query_Status = 183,
+        Locus_Erase_Flash = 184,
+        Locus_Stop_Logger = 185,
+        Locus_Log_Now = 186,
+        Locus_Config=187,
         SetPosFix = 220,
-        SetALDeeCfg = 223,
+        Set_AL_DeeCfg = 223,
         SetPeriodicMode = 225,
         SetDataPort = 250,
-        SetNmeaBaudRate= 251,
-        SetSyncPPSNmea = 255,
-        SetGLPMode = 262,
-        SetNmeaReportInterval = 263,
-        SetNmeaReportCondition = 264,
-        SetPPSConfigCmd =285,
-        SetAICCmd = 286,
+        Set_Nmea_BaudRate= 251,
+        Set_Sync_PPS_Nmea = 255,
+        Set_GLP_Mode = 262,
+        Set_Nmea_ReportInterval = 263,
+        Set_Nmea_ReportCondition = 264,
+        Set_PPS_ConfigCmd =285,
+        Set_AIC_Cmd = 286,
         SetOutputDebug = 299,
-        APISetFixCtl = 300,
-        APISetSBASEnabled=313,
+        API_Set_FixCtl = 300,
+        API_Set_SBAS_Enabled=313,
         APISetNmeaOutput=314,
-        APISetPPS=326,
-        APISetGNSSSearchMode=353,
-        APIQueryGnssSearchMode =355,
-        APISetHDOPThreshold=356,
-        APIGetHDOPThreshold=357,
-        APISetStaticNavThd=386,
+        API_Set_PPS=326,
+        API_Set_GNSS_SearchMode=353,
+        API_Query_GNSS_SearchMode =355,
+        API_Set_HDOP_Threshold=356,
+        API_Get_HDOP_Threshold=357,
+        API_Set_Static_NavThd=386,
         APIQFixCTL= 400,
-        APIQSBASEnabled=413,
-        APIQNmeaOutput=414,
-        DTFixCtl=500,
-        DTSBASEnabled=513,
-        DTNmeaOutput=514,
-        QRelease =605,
-        QEPOInfo=607,
-        QLocusData=622,
-        DTRelease=705,
-        DTUTC=740,
-        DTPos=741
+        API_Q_SBAS_Enabled=413,
+        API_QNmea_Output=414,
+        DT_FixCtl=500,
+        DT_SBAS_Enabled=513,
+        DT_Nmea_Output=514,
+        Q_Release =605,
+        Q_EPO_Info=607,
+        Q_LocusData=622,
+        DT_Release=705,
+        DT_UTC=740,
+        DT_Pos=741
     };
     Q_ENUM(PacketType)
 signals:
@@ -71,6 +73,15 @@ private:
     QWidget *window;
 
     void process(QList<QString> pmtkSentence);
+    void process001(QString packetName,QString status);
+    void process010(QString packetName,QString systemTextMessage);
+    void process011(QString packetName,QString textMessage);
+    void process500(QList<QString> data);
+    void process513(QString packetName,QString textMessage);
+    void process514(QList<QString> data);
+    void process705(QList<QString> data);
+    void process707(QList<QString>data);
+
 };
 
 #endif // PMTKSENTENCE_H

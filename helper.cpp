@@ -21,3 +21,8 @@ int Helper::calculateCheckSum(const char *s)
     return c;
 
 }
+
+QString Helper::getPacketName(int packetValue)
+{
+    return QString(QMetaEnum::fromType<PMTKSentence::PacketType>().valueToKey(packetValue));
+}

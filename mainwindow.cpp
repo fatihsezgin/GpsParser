@@ -38,12 +38,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(btnOpenPort,&QPushButton::clicked, this,&MainWindow::openSerialPort);
     connect(btnClosePort,&QPushButton::clicked,this,&MainWindow::closeSerialPort);
     connect(btnSendCommand,&QPushButton::clicked,this,&MainWindow::sendCommand);
+    connect(lEditCommand,&QLineEdit::returnPressed,this,&MainWindow::sendCommand);
 
 }
 
 void MainWindow::processData(QString data)
 {
-    //qDebug() << data;
+    qDebug() << "dataa"<< data;
     if(data.isEmpty() || !data.contains("\r\n")) return;
 
     QList<QString> parts = data.split("\r\n");
@@ -139,6 +140,7 @@ void MainWindow::processData(QString data)
             }
         }
     }
+    plainText->ensureCursorVisible();
 }
 
 bool MainWindow::openSerialPort()
@@ -224,9 +226,13 @@ void MainWindow::sendCommand()
     if(!serial->isOpen()){
         QMessageBox::information(this,"Serial Port Closed", "Please open serial port!");
         return;
-    }
+    } 
+    QString cmdFromGUI = lEditCommand->text().toUpper();// Get command from user.
 
-    QString cmdFromGUI = lEditCommand->text();// Get command from user.
+    if(!cmdFromGUI.startsWith("p",Qt::CaseSensitivity::CaseInsensitive)){
+        QMessageBox::information(this,"Wrong Command","Only PMTK sentences are supported"); //All commands should be started with P | p
+        //lEditCommand->clear();
+    }
     //qDebug() << cmdFromGUI;
     //char *cmdChar = cmdFromGUI.toUtf8().data();
     int checksum = Helper::calculateCheckSum(cmdFromGUI.toUtf8().data()); // for calculating the checksum checksum is converted into char *;
@@ -238,7 +244,7 @@ void MainWindow::sendCommand()
     cmdToSend.append(cmdFromGUI);
     cmdToSend.append("*");
     cmdToSend.append(hex);
-    cmdToSend.append(QChar(13));// < CR>
+    cmdToSend.append(QChar(13));// <CR>
     cmdToSend.append(QChar(10));// <LF>
 
     //cmdToSend = "$PMTK314,-1*04\r\n";
@@ -289,7 +295,7 @@ void MainWindow::serialReceived()
     if(bufferSize > 0){
         QString data = QString(serial->readAll());
         strData.append(data);
-        qDebug() << strData;
+        //qDebug() << strData;
         if(strData.endsWith("\n")){
             //qDebug() << __PRETTY_FUNCTION__<<   strData;
             processData(strData);
@@ -315,4 +321,7 @@ MainWindow::~MainWindow()
 }
 
 
-
+void MainWindow::on_actionOpen_the_Doc_triggered()
+{
+    QDesktopServices::openUrl(QUrl(QDir::currentPath()+"/documentation.pdf"));
+}

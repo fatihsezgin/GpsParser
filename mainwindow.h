@@ -21,6 +21,8 @@
 #include <gsvdetail.h>
 #include <gsvsentence.h>
 #include <QStringLiteral>
+#include <QDesktopServices>
+#include <QDir>
 #include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -46,6 +48,8 @@ private slots:
     void enableSerialPortSettings();
     void disableSerialPortSettings();
 
+
+    void on_actionOpen_the_Doc_triggered();
 
 private:
     Ui::MainWindow *ui;

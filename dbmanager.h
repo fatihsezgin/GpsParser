@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <ggasentence.h>
 #include <rmcsentence.h>
+#include <gllsentence.h>
+#include <vtgsentence.h>
+#include <zdasentence.h>
 class DbManager
 {
 public:
@@ -19,10 +22,14 @@ public:
     bool openTransaction();
     bool commit();
 
+    void prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool gsv,bool hdt,bool vtg,bool zda);
 
-    bool insertGPSDatum();
+    bool insertGPSDatum(QString &queryString);
     void insertGGA(GGASentence *gga);
     bool insertRMC(RMCSentence *rmc);
+    bool insertGLL(GLLSentence *gll);
+    bool insertVTG(VTGSentence *vtg);
+    bool insertZDA(ZDASentence *zda);
 
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
@@ -32,6 +39,7 @@ public:
 
 private:
     QSqlDatabase db;
+
     /*GGASentence *gga;
     RMCSentence *rmc;*/
 

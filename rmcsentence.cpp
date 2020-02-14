@@ -5,7 +5,7 @@ RMCSentence::RMCSentence(QObject *parent) : QObject(parent)
 
 }
 
-RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixTime,QString status,QString latitude,QString latitudeDirection,QString longitude,QString longitudeDirection,QString speedOverGround,QString courseOverGround,QString date,QString magneticVariation, QString magneticVarIndicator, QString modeIndicator){
+RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixTime,QString status,QString latitude,QString latitudeDirection,QString longitude,QString longitudeDirection,QString speedOverGround,QString courseOverGround,QString date,QString magneticVariation, QString magneticVarIndicator,QString modeIndicator){
     setSentenceIdentifier(sentenceIdentifier);
     setFixTime(fixTime);
     setStatus(status);
@@ -16,7 +16,8 @@ RMCSentence::RMCSentence(QString sentenceIdentifier,QString fixTime,QString stat
     setSpeedOverGround(speedOverGround);
     setCourseOverGround(courseOverGround);
     setDate(date);
-    setMagneticVariation(magneticVariation,magneticVarIndicator);
+    setMagneticVariation(magneticVariation);
+    setMagneticVarIndicator(magneticVarIndicator);
     setModeIndicator(modeIndicator);
 }
 
@@ -101,17 +102,20 @@ void RMCSentence::setDate(const QString &value)
     date = newDate;
 }
 
-QString RMCSentence::getMagneticVariation() const
+double RMCSentence::getMagneticVariation() const
 {
     return magneticVariation;
 }
 
-void RMCSentence::setMagneticVariation(QString &magneticVariation, QString &magneticVarIndicator)
+void RMCSentence::setMagneticVariation(QString &magneticVariation)
 {
-    if(!magneticVariation.isNull() && !magneticVarIndicator.isNull() ){
-            magneticVariation.append(" " + magneticVarIndicator);
-            this->magneticVariation = magneticVariation;
-    }
+    this->magneticVariation = magneticVariation.toDouble();
+}
+
+
+QString RMCSentence::toString()
+{
+    return (this->sentenceIdentifier + " " +this->getFixTime().toString()+ " "+this->getStatus()+" " + QString::number(this->getLatitude())+ " " + this->getLatitudeDirection()+ " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection()+ " "  + QString::number(this->speedOverGround)+ " "  + QString::number(this->courseOverGround)+ " "  + this->date.toString()+ " "  + QString::number(this->getMagneticVariation())+ " "  +this->getMagneticVarIndicator()+" "  +this->getModeIndicator()+ "\n");
 }
 
 QString RMCSentence::getModeIndicator() const
@@ -124,10 +128,16 @@ void RMCSentence::setModeIndicator(const QString &value)
     modeIndicator = value;
 }
 
-QString RMCSentence::toString()
+QString RMCSentence::getMagneticVarIndicator() const
 {
-    return (this->sentenceIdentifier + " " +this->getFixTime().toString()+ " "+this->getStatus()+" " + QString::number(this->getLatitude())+ " " + this->getLatitudeDirection()+ " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection()+ " "  + QString::number(this->speedOverGround)+ " "  + QString::number(this->courseOverGround)+ " "  + this->date.toString()+ " "  + this->getMagneticVariation()+ " "  +this->getModeIndicator()+ "\n");
+    return magneticVarIndicator;
 }
+
+void RMCSentence::setMagneticVarIndicator(const QString &value)
+{
+    magneticVarIndicator = value;
+}
+
 
 QString RMCSentence::getLatitudeDirection() const
 {

@@ -23,6 +23,7 @@
 #include <QStringLiteral>
 #include <QDesktopServices>
 #include <QDir>
+#include "dbmanager.h"
 #include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -58,6 +59,7 @@ private:
     QLineEdit *lEditCommand;
     QComboBox *cboxPortName,*cboxBaudRate,*cboxDataBits, *cboxParity,*cboxStopBits,*cboxFlowControl;
     QPushButton *btnOpenPort, *btnClosePort,*btnSendCommand;
+    DbManager dbMenager;
 
 
 };

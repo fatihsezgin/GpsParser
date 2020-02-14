@@ -12,7 +12,7 @@ public:
     explicit RMCSentence(QObject *parent = nullptr);
 
     RMCSentence(QString sentenceIdentigier,
-                QString fixDate,
+                QString fixTime,
                 QString status,
                 QString latitude,
                 QString latitudeDirection,
@@ -55,14 +55,16 @@ public:
     QDate getDate() const;
     void setDate(const QString &value);
 
-    QString getMagneticVariation() const;
-    void setMagneticVariation( QString &magneticVariation, QString &magneticVarIndicator);
+    double getMagneticVariation() const;
+    void setMagneticVariation(QString &value);
 
-    QString getModeIndicator() const;
-    void setModeIndicator(const QString &value);
+    QString getMagneticVarIndicator() const;
+    void setMagneticVarIndicator(const QString &value);
 
     QString toString();
 
+    QString getModeIndicator() const;
+    void setModeIndicator(const QString &value);
 
 signals:
 
@@ -79,9 +81,9 @@ private:
     double speedOverGround;
     double courseOverGround;
     QDate date;
-    QString magneticVariation;
+    double magneticVariation;
     QString magneticVarIndicator;
-    QString modeIndicator;
+    QString modeIndicator; // in some gps devices does not contains this variable !!! (unclear)
 };
 
 #endif // RMCSENTENCE_H

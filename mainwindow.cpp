@@ -84,14 +84,15 @@ void MainWindow::processData(QString data)
                     if(parts[0].contains("GGA")){
                         GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[11]);
                         qDebug() << s.toString();
-                        dbMenager.setGga(&s);
-                        dbMenager.createTable();
+                        dbMenager.insertGGA(&s);
+                        //dbMenager.setGga(&s);
+                        //dbMenager.createTable();
                         plainText->insertPlainText(s.toString());
                     }
                     else if(parts[0].contains("RMC")){
                         RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
                         qDebug() << s.toString();
-                        dbMenager.setRmc(&s);
+                        dbMenager.insertRMC(&s);
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GLL")){
                         GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
@@ -138,14 +139,14 @@ void MainWindow::processData(QString data)
                             PMTKSentence s (parts,this);
                     }
                     //dbMenager.createTable();
-
+                    dbMenager.commit();
                 }
-
             }else{
                 return;
             }
         }
     }
+    dbMenager.insertGPSDatum();
     plainText->ensureCursorVisible();
 }
 

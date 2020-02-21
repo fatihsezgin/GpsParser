@@ -5,7 +5,7 @@ GNSSentence::GNSSentence(QObject *parent) : QObject(parent)
 
 }
 
-GNSSentence::GNSSentence(QString sentenceIdentifier, QString fixTime, QString latitude, QString latitudeDirection, QString longitude, QString longitudeDirection, QString mode, QString noOfSatallites, QString HDOP, QString orthometricHeight, QString geoidalSeperation, QString referenceStationId)
+GNSSentence::GNSSentence(QString sentenceIdentifier, QString fixTime, QString latitude, QString latitudeDirection, QString longitude, QString longitudeDirection, QString mode, QString noOfSatallites, QString HDOP, QString orthometricHeight, QString geoidalSeperation,QString ageofDifferentialData, QString referenceStationId)
 {
     setSentenceIdentifier(sentenceIdentifier);
     setFixTime(fixTime);
@@ -18,6 +18,7 @@ GNSSentence::GNSSentence(QString sentenceIdentifier, QString fixTime, QString la
     setHDOP(HDOP);
     setOrthometricHeight(orthometricHeight);
     setGeoidalSeparation(geoidalSeperation);
+    setAgeOfDifferentialData(ageofDifferentialData);
     setReferenceStationId(referenceStationId);
 
 }
@@ -25,7 +26,7 @@ GNSSentence::GNSSentence(QString sentenceIdentifier, QString fixTime, QString la
 
 QString GNSSentence::toString()
 {
-    return QString(this->getSentenceIdentifier() + " " + this->getFixTime().toString() + " " + QString::number(this->getLatitude()) + " " + this->getLatitudeDirection() + " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection() + " " + this->getMode() + " " + QString::number(this->getNumberOfStallites()) + " " +QString::number( this->getHDOP())+ " " +QString::number(this->getOrthometricHeight()) + " " +QString::number(this->getGeoidalSeparation())+ " " +QString::number(this->getReferenceStationId())+"\n") ;
+    return QString(this->getSentenceIdentifier() + " " + this->getFixTime().toString() + " " + QString::number(this->getLatitude()) + " " + this->getLatitudeDirection() + " " + QString::number(this->getLongitude())+ " " + this->getLongitudeDirection() + " " + this->getMode() + " " + QString::number(this->getNumberOfStallites()) + " " +QString::number( this->getHDOP())+ " " +QString::number(this->getOrthometricHeight()) + " " +QString::number(this->getGeoidalSeparation())+ " " +QString::number(this->getAgeOfDifferentialData())+ " " +QString::number(this->getReferenceStationId())+"\n") ;
 }
 
 

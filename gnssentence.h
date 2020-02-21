@@ -22,6 +22,7 @@ public:
                 QString HDOP,
                 QString orthometricHeight,
                 QString geoidalSeperation,
+                QString ageofDifferentialData,
                 QString referenceStationId);
 
     QString getSentenceIdentifier() const;

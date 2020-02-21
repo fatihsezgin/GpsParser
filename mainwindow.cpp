@@ -95,38 +95,41 @@ void MainWindow::processData(QString data)
 
                     if(parts[0].contains("GGA")){
                         GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[11]);
-                        qDebug() << s.toString();
-                        dbMenager.insertGGA(&s);
+                        //qDebug() << s.toString();
+                        qDebug() << "insertGGA" << dbMenager.insertGGA(&s);
                         gga = true;
                         plainText->insertPlainText(s.toString());
                     }
                     else if(parts[0].contains("RMC")){
                         RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
-                        qDebug() << s.toString();
+                        //qDebug() << s.toString();
                         dbMenager.insertRMC(&s);
                         rmc = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GLL")){
                         GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
-                        qDebug() << s.toString();
-                        qDebug() << "gll"<<dbMenager.insertGLL(&s);
+                        //qDebug() << s.toString();
+                        qDebug() << "insertGLL"<<dbMenager.insertGLL(&s);
                         gll =true;
                         plainText->insertPlainText(s.toString());
                     }else if (parts[0].contains("VTG")){
                         VTGSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
-                        qDebug() << s.toString();
-                        dbMenager.insertVTG(&s);
+                        //qDebug() << s.toString();
+                        qDebug() << "insertVTG" <<dbMenager.insertVTG(&s);
                         vtg = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("ZDA")){
                         ZDASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
-                        qDebug() << s.toString();
-                        dbMenager.insertZDA(&s);
+                        //qDebug() << s.toString();
+                        qDebug() <<  "insertZDA" << dbMenager.insertZDA(&s);
                         zda = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GNS")){
-                        GNSSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11]);
-                        qDebug() << s.toString();
+                        GNSSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
+                        //qDebug() << s.toString();
+                        qDebug() << parts;
+                        qDebug() << "insertGNS" <<dbMenager.insertGNS(&s);
+                        gns = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("HDT")){
                         HDTSentence s(parts[0],parts[1],parts[2]);
@@ -163,7 +166,7 @@ void MainWindow::processData(QString data)
             }
         }
     }
-    qDebug() << "gga" << gga << "rmc " << rmc << "vtg" << vtg;
+    qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
     dbMenager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
     plainText->ensureCursorVisible();
 }

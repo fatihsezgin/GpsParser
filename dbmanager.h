@@ -11,6 +11,7 @@
 #include <gllsentence.h>
 #include <vtgsentence.h>
 #include <zdasentence.h>
+#include <gnssentence.h>
 class DbManager
 {
 public:
@@ -25,12 +26,12 @@ public:
     void prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool gsv,bool hdt,bool vtg,bool zda);
 
     bool insertGPSDatum(QString &queryString);
-    void insertGGA(GGASentence *gga);
+    bool insertGGA(GGASentence *gga);
     bool insertRMC(RMCSentence *rmc);
     bool insertGLL(GLLSentence *gll);
     bool insertVTG(VTGSentence *vtg);
     bool insertZDA(ZDASentence *zda);
-
+    bool insertGNS(GNSSentence *gns);
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
 

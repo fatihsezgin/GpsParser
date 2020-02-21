@@ -100,6 +100,8 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
         query.append("insert into GPSDatum (" );
         query.append(ids + ") values ("+selectQuery+");");
 
+        qDebug() << query;
+
         qDebug() << "insert GpsDatum"<<   insertGPSDatum(query);
 
 }
@@ -110,7 +112,7 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
         return query.exec(queryString);
     }
 
-    void DbManager::insertGGA(GGASentence *gga)
+    bool DbManager::insertGGA(GGASentence *gga)
     {
         QSqlQuery query(db);
         query.prepare("insert into GGASentence(FIXTIME,LATITUDE,LATDIR,LONGITUDE,LONGDIR,FIXEDQUALITY,SATALLITENUMBER,HORIZONTALDILUTION,ALTITUDE,HEIGHTOFGEOID) values (:a,:b,:c,:d,:e,:f,:g,:h,:k,:l) ");
@@ -124,7 +126,7 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
         query.bindValue(":h",gga->getHorizontalDilution());
         query.bindValue(":k",gga->getAltitude());
         query.bindValue(":l",gga->getHeightOfGeoid());
-        qDebug() << "insertGGA"<< query.exec();
+        return  query.exec();
 
     }
 
@@ -183,8 +185,30 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
         query.bindValue(":b",zda->getDate().toString());
         query.bindValue(":c",zda->getLocalZoneHours());
         query.bindValue(":d",zda->getLocalZoneMinutes());
+
+        //qDebug() << zda->getUtcTime() << zda->getDate() << zda->getLocalZoneHours() << zda->getLocalZoneHours()
+
         return  query.exec();
 
+    }
+
+    bool DbManager::insertGNS(GNSSentence *gns)
+    {
+      QSqlQuery query(db);
+      query.prepare("insert into GNSSentence(FIXTIME, LATITUDE, LATDIR, LONGITUDE, LONGDIR, MODEINDUCATOR, NUMOFSATALLITES, HDOP, ORTHOMETRICHEIGHT, GEOIDALSEPARATION, AGEOFDIFFERANTIALDATA, REFERENCESTATIONID) values(:a,:b,:c,:d,:e,:f,:g,:h,:k,:l,:m,:n);");
+      query.bindValue(":a",gns->getFixTime());
+      query.bindValue(":b",gns->getLatitude());
+      query.bindValue(":c",gns->getLatitudeDirection());
+      query.bindValue(":d",gns->getLongitude());
+      query.bindValue(":e",gns->getLongitudeDirection());
+      query.bindValue(":f",gns->getMode());
+      query.bindValue(":g",gns->getNumberOfStallites());
+      query.bindValue(":h",gns->getHDOP());
+      query.bindValue(":k",gns->getOrthometricHeight());
+      query.bindValue(":l",gns->getGeoidalSeparation());
+      query.bindValue(":m",gns->getAgeOfDifferentialData());
+      query.bindValue(":n",gns->getReferenceStationId());
+      return  query.exec();
     }
 
     /*GGASentence *DbManager::getGga() const

@@ -12,6 +12,8 @@
 #include <vtgsentence.h>
 #include <zdasentence.h>
 #include <gnssentence.h>
+#include <hdtsentence.h>
+#include <gsasentence.h>
 class DbManager
 {
 public:
@@ -32,6 +34,8 @@ public:
     bool insertVTG(VTGSentence *vtg);
     bool insertZDA(ZDASentence *zda);
     bool insertGNS(GNSSentence *gns);
+    bool insertHDT(HDTSentence *hdt);
+    bool insertGSA(GSASentence *gsa);
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
 

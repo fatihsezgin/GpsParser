@@ -134,6 +134,9 @@ void MainWindow::processData(QString data)
                     }else if(parts[0].contains("HDT")){
                         HDTSentence s(parts[0],parts[1],parts[2]);
                         qDebug() << s.getSentenceIdentifier() << s.getDegree() << s.getRelative();
+                        qDebug() << "insertHDT" <<dbMenager.insertHDT(&s);
+                        hdt = true;
+                        plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GSA")){
                         QList<int> list;
                         for(int i = 3 ; i <= 14 ; i++){
@@ -141,6 +144,8 @@ void MainWindow::processData(QString data)
                         }
                         GSASentence s (parts[0],parts[1],parts[2],list,parts[15],parts[16],parts[17]);
                         plainText->insertPlainText(s.toString());
+                        dbMenager.insertGSA(&s);
+                        gsa =true;
                         qDebug()  << s.toString();
                     }else if(parts[0].contains("GSV")){
                         QList<GSVDetail*> list;

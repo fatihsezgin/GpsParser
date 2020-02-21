@@ -211,6 +211,46 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
       return  query.exec();
     }
 
+    bool DbManager::insertHDT(HDTSentence *hdt)
+    {
+        QSqlQuery query(db);
+        query.prepare("insert into HDTSentence(HEADINGDEGREE,RELATIVE) VALUES (:a,:b);");
+        query.bindValue(":a",hdt->getDegree());
+        query.bindValue(":b",hdt->getRelative());
+        return  query.exec();
+    }
+
+    bool DbManager::insertGSA(GSASentence *gsa)
+    {
+        QSqlQuery query(db);
+        query.prepare("insert into GSASataList (SATA1, SATA2, SATA3, SATA4, SATA5, SATA6, SATA7, SATA8, SATA9, SATA10, SATA11, SATA12) values (:a,:b,:c,:d,:e,:f,:g,:h,:k,:l,:m,:n);");
+        query.bindValue(":a",gsa->getIds()[0]);
+        query.bindValue(":b",gsa->getIds()[1]);
+        query.bindValue(":c",gsa->getIds()[2]);
+        query.bindValue(":d",gsa->getIds()[3]);
+        query.bindValue(":e",gsa->getIds()[4]);
+        query.bindValue(":f",gsa->getIds()[5]);
+        query.bindValue(":g",gsa->getIds()[6]);
+        query.bindValue(":h",gsa->getIds()[7]);
+        query.bindValue(":k",gsa->getIds()[8]);
+        query.bindValue(":l",gsa->getIds()[9]);
+        query.bindValue(":m",gsa->getIds()[10]);
+        query.bindValue(":n",gsa->getIds()[11]);
+
+        bool a = query.exec();
+
+        QSqlQuery q (db);
+        q.prepare("insert into GSASentence (MODE,FIX,PDOP,HDOP,VDOP,LISTID) values (:a,:b,:c,:d,:e,(select seq from sqlite_sequence where name ='GSASataList'));");
+        q.bindValue(":a", gsa->getMode());
+        q.bindValue(":b",gsa->getFix());
+        q.bindValue(":c",gsa->getPDOP());
+        q.bindValue(":d",gsa->getHDOP());
+        q.bindValue(":e",gsa->getVDOP());
+
+        bool b = q.exec();
+        return  (a && b);
+    }
+
     /*GGASentence *DbManager::getGga() const
 {
     return gga;

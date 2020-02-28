@@ -5,6 +5,7 @@
 #include <QSqlDriver>
 #include <QSqlQuery>
 #include <QDir>
+#include <QList>
 #include <QDebug>
 #include <ggasentence.h>
 #include <rmcsentence.h>
@@ -14,6 +15,8 @@
 #include <gnssentence.h>
 #include <hdtsentence.h>
 #include <gsasentence.h>
+#include <gsvdetail.h>
+#include <gsvsentence.h>
 class DbManager
 {
 public:
@@ -36,6 +39,8 @@ public:
     bool insertGNS(GNSSentence *gns);
     bool insertHDT(HDTSentence *hdt);
     bool insertGSA(GSASentence *gsa);
+    bool insertGSV(GSVSentence *gsv);
+    bool insertTotalGSV(int totalMessageNumber);
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
 

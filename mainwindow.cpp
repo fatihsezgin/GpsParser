@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::processData(QString data)
 {
-    qDebug() << "dataa"<< data;
+    //qDebug() << "dataa"<< data;
     if(data.isEmpty() || !data.contains("\r\n")) return;
 
     QList<QString> parts = data.split("\r\n");
@@ -63,7 +63,9 @@ void MainWindow::processData(QString data)
     bool vtg= false;
     bool zda = false;
 
-
+    int totalMessage =0 ;
+    int currentMessage = 0;
+    QList<QString> GSVList ;
 
     for(int i = 0; i< parts.size();i++){
         if(parts[i].isEmpty()){
@@ -148,6 +150,34 @@ void MainWindow::processData(QString data)
                         gsa =true;
                         qDebug()  << s.toString();
                     }else if(parts[0].contains("GSV")){
+                        gsv = true;
+                         totalMessage = parts[1].toInt();
+                         currentMessage = parts[2].toInt();
+
+                         if ( totalMessage >= currentMessage){
+                             QList<GSVDetail*> list;
+                             GSVDetail *detail;
+                             if(parts.size() < 20){
+                                 qDebug() << "message is corrupted.";
+                             }else{
+                                 for(int i = 4 ; i < 20 ; i+=4 ){
+                                     detail = new GSVDetail(parts[i],parts[i+1],parts[i+2],parts[i+3]);
+                                     list.append(detail);
+                                 }
+                                 GSVSentence s(parts[0],parts[1],parts[2],parts[3],list);
+                                 dbMenager.insertGSV(&s);
+                             }
+                             if(totalMessage == currentMessage){
+                                 qDebug() << "insertTotal"<< dbMenager.insertTotalGSV(totalMessage);
+                             }
+                         }
+
+                         /*if ( totalMessage >= currentMessage){
+                             qDebug() << totalMessage << currentMessage;
+                             GSVList.append(parts);
+                         }*/
+                         //qDebug() << " GSVList :   " << GSVList;
+                        /*
                         QList<GSVDetail*> list;
                         GSVDetail *detail;
                         if(parts.size() < 20){
@@ -160,7 +190,7 @@ void MainWindow::processData(QString data)
                             GSVSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],list);
                             qDebug() << s.toString();
                             plainText->insertPlainText(s.toString());
-                        }
+                        }*/
                     }else if(parts[0].contains("PMTK")){
                             PMTKSentence s (parts,this);
                     }
@@ -171,6 +201,26 @@ void MainWindow::processData(QString data)
             }
         }
     }
+    //qDebug() << GSVList;
+    /*if(gsv){
+        for(int i = 0 ; i < GSVList.size() ; i +=16){  // removing the sentence identitiers and message numbers
+            for(int j = 0 ; j <4 ; j++){
+                GSVList.removeAt(i);
+            }
+        }
+        qDebug() << "after delete " <<GSVList;
+        qDebug() << GSVList.length();
+
+        QList<GSVDetail*> list;
+        GSVDetail *detail;
+        for(int i = 0 ; i < GSVList.size(); i+=4){
+            detail= new GSVDetail(GSVList[i],GSVList[i+1],GSVList[i+2],GSVList[i+3]);
+            list.append(detail);
+            qDebug() << detail->getSvPrnNumber() << detail->getSNR();
+        }
+        dbMenager.insertGSV(list);
+    }*/
+
     qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
     dbMenager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
     plainText->ensureCursorVisible();

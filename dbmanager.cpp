@@ -251,6 +251,69 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
         return  (a && b);
     }
 
+    bool DbManager::insertGSV(GSVSentence *gsv)
+    {
+        QSqlQuery query(db);
+        for(int i = 0 ; i< gsv->getSvlist().size(); i++){
+            query.prepare("insert into GSVDetail(PRNNO,ELEVATION,AZIMUTH,SNR) values (:a,:b,:c,:d);");
+            query.bindValue(":a",gsv->getSvlist().at(i)->getSvPrnNumber());
+            query.bindValue(":b",gsv->getSvlist().at(i)->getElevationDegree());
+            query.bindValue(":c",gsv->getSvlist().at(i)->getAzimuthDegree());
+            query.bindValue(":d",gsv->getSvlist().at(i)->getSNR());
+            query.exec();
+        }
+        int i = query.lastInsertId().toInt() - gsv->getSvlist().size(); // to get ıds that have been inserted into messages table to do inserting to GSVSentence
+
+        QSqlQuery q (db);
+        q.prepare( "insert into GSVMessage(TOTALMSGNO,CURRENTMSGNO,TOTALSVNO,GSVDETAIL1,GSVDETAIL2,GSVDETAIL3,GSVDETAIL4) values (:a,:b,:c,:d,:e,:f,:g)");
+        q.bindValue(":a",gsv->getTotalMessageNum());
+        q.bindValue(":b",gsv->getMessageNumber());
+        q.bindValue(":c",gsv->getTotalNumberSatallites());
+        q.bindValue(":d",i);
+        q.bindValue(":e",i+1);
+        q.bindValue(":f",i+2);
+        q.bindValue(":g",i+3);
+
+        return q.exec() ;
+
+    }
+
+    bool DbManager::insertTotalGSV(int totalMessageNumber)
+    {
+
+        if(totalMessageNumber > 0 ){
+            int lastinsertedid;
+            QSqlQuery query (db);
+            query.exec("select seq from sqlite_sequence where name='GSVMessage';");
+            while(query.next()){
+                lastinsertedid = query.value(0).toInt();
+            }
+            int beginindex = lastinsertedid - totalMessageNumber; // beginindex is the index that will be start inserting from.
+
+            QString queryString = "";
+            QStringList rows;
+            QStringList values;
+
+            // rows that will be inserting
+            for(int i = 1; i <= totalMessageNumber ; i++){
+                  rows.append("SENTENCE"+QString::number(i)+"ID");
+            }
+            QString queryrows = rows.join(",");
+
+            for (int i = beginindex; i < beginindex+totalMessageNumber ;i++ ){
+                values.append(QString::number(i));
+            }
+            QString queryvalue = values.join(",");
+
+            queryString.append("insert into GSVSentence("+queryrows+") values("+queryvalue+");");
+            QSqlQuery q(db);
+            qDebug() << "quuueryyyyyyyy" << queryString;
+            return q.exec(queryString);
+        }
+        return false;
+
+    }
+
     /*GGASentence *DbManager::getGga() const
 {
     return gga;

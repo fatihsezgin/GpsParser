@@ -23,7 +23,7 @@ public:
     DbManager();
 
     bool isOpen() const;
-    void createTable() ;
+    bool createTable() ;
     bool open();
     bool openTransaction();
     bool commit();

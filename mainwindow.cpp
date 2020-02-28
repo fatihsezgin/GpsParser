@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     dbMenager.open();
+    qDebug() << "create table " <<dbMenager.createTable();
 
     plainText = ui->plainTextEdit;
     cboxPortName = ui->cboxPortName;

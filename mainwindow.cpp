@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    dbMenager.open();
-    qDebug() << "create table " <<dbMenager.createTable();
+    dbManager.open();
+    qDebug() << "create table " <<dbManager.createTable();
 
     plainText = ui->plainTextEdit;
     cboxPortName = ui->cboxPortName;
@@ -99,45 +99,45 @@ void MainWindow::processData(QString data)
                     if(parts[0].contains("GGA")){
                         GGASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[11]);
                         //qDebug() << s.toString();
-                        qDebug() << "insertGGA" << dbMenager.insertGGA(&s);
+                        qDebug() << "insertGGA" << dbManager.insertGGA(&s);
                         gga = true;
                         plainText->insertPlainText(s.toString());
                     }
                     else if(parts[0].contains("RMC")){
                         RMCSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
                         //qDebug() << s.toString();
-                        dbMenager.insertRMC(&s);
+                        dbManager.insertRMC(&s);
                         rmc = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GLL")){
                         GLLSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
                         //qDebug() << s.toString();
-                        qDebug() << "insertGLL"<<dbMenager.insertGLL(&s);
+                        qDebug() << "insertGLL"<<dbManager.insertGLL(&s);
                         gll =true;
                         plainText->insertPlainText(s.toString());
                     }else if (parts[0].contains("VTG")){
                         VTGSentence s (parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9]);
                         //qDebug() << s.toString();
-                        qDebug() << "insertVTG" <<dbMenager.insertVTG(&s);
+                        qDebug() << "insertVTG" <<dbManager.insertVTG(&s);
                         vtg = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("ZDA")){
                         ZDASentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6]);
                         //qDebug() << s.toString();
-                        qDebug() <<  "insertZDA" << dbMenager.insertZDA(&s);
+                        qDebug() <<  "insertZDA" << dbManager.insertZDA(&s);
                         zda = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GNS")){
                         GNSSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],parts[8],parts[9],parts[10],parts[11],parts[12]);
                         //qDebug() << s.toString();
                         qDebug() << parts;
-                        qDebug() << "insertGNS" <<dbMenager.insertGNS(&s);
+                        qDebug() << "insertGNS" <<dbManager.insertGNS(&s);
                         gns = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("HDT")){
                         HDTSentence s(parts[0],parts[1],parts[2]);
                         qDebug() << s.getSentenceIdentifier() << s.getDegree() << s.getRelative();
-                        qDebug() << "insertHDT" <<dbMenager.insertHDT(&s);
+                        qDebug() << "insertHDT" <<dbManager.insertHDT(&s);
                         hdt = true;
                         plainText->insertPlainText(s.toString());
                     }else if(parts[0].contains("GSA")){
@@ -147,7 +147,7 @@ void MainWindow::processData(QString data)
                         }
                         GSASentence s (parts[0],parts[1],parts[2],list,parts[15],parts[16],parts[17]);
                         plainText->insertPlainText(s.toString());
-                        dbMenager.insertGSA(&s);
+                        dbManager.insertGSA(&s);
                         gsa =true;
                         qDebug()  << s.toString();
                     }else if(parts[0].contains("GSV")){
@@ -166,64 +166,25 @@ void MainWindow::processData(QString data)
                                      list.append(detail);
                                  }
                                  GSVSentence s(parts[0],parts[1],parts[2],parts[3],list);
-                                 dbMenager.insertGSV(&s);
+                                 dbManager.insertGSV(&s);
                              }
                              if(totalMessage == currentMessage){
-                                 qDebug() << "insertTotal"<< dbMenager.insertTotalGSV(totalMessage);
+                                 qDebug() << "insertTotal"<< dbManager.insertTotalGSV(totalMessage);
                              }
                          }
-
-                         /*if ( totalMessage >= currentMessage){
-                             qDebug() << totalMessage << currentMessage;
-                             GSVList.append(parts);
-                         }*/
-                         //qDebug() << " GSVList :   " << GSVList;
-                        /*
-                        QList<GSVDetail*> list;
-                        GSVDetail *detail;
-                        if(parts.size() < 20){
-                            qDebug() << "message is corrupted.";
-                        }else{
-                            for(int i = 8 ; i < 20 ; i+=4 ){
-                                detail = new GSVDetail(parts[i],parts[i+1],parts[i+2],parts[i+3]);
-                                list.append(detail);
-                            }
-                            GSVSentence s(parts[0],parts[1],parts[2],parts[3],parts[4],parts[5],parts[6],parts[7],list);
-                            qDebug() << s.toString();
-                            plainText->insertPlainText(s.toString());
-                        }*/
                     }else if(parts[0].contains("PMTK")){
                             PMTKSentence s (parts,this);
                     }
-                    dbMenager.commit();
+                    dbManager.commit();
                 }
             }else{
                 return;
             }
         }
     }
-    //qDebug() << GSVList;
-    /*if(gsv){
-        for(int i = 0 ; i < GSVList.size() ; i +=16){  // removing the sentence identitiers and message numbers
-            for(int j = 0 ; j <4 ; j++){
-                GSVList.removeAt(i);
-            }
-        }
-        qDebug() << "after delete " <<GSVList;
-        qDebug() << GSVList.length();
-
-        QList<GSVDetail*> list;
-        GSVDetail *detail;
-        for(int i = 0 ; i < GSVList.size(); i+=4){
-            detail= new GSVDetail(GSVList[i],GSVList[i+1],GSVList[i+2],GSVList[i+3]);
-            list.append(detail);
-            qDebug() << detail->getSvPrnNumber() << detail->getSNR();
-        }
-        dbMenager.insertGSV(list);
-    }*/
 
     qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
-    dbMenager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
+    dbManager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
     plainText->ensureCursorVisible();
 }
 

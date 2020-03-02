@@ -59,7 +59,7 @@ private:
     QLineEdit *lEditCommand;
     QComboBox *cboxPortName,*cboxBaudRate,*cboxDataBits, *cboxParity,*cboxStopBits,*cboxFlowControl;
     QPushButton *btnOpenPort, *btnClosePort,*btnSendCommand;
-    DbManager dbMenager;
+    DbManager dbManager;
 
 
 };

@@ -4,7 +4,7 @@
 DbManager::DbManager()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(QDir::currentPath()+"/NMEASentences.db");
+    db.setDatabaseName(QDir::currentPath()+"/NMEASentencesdeneme.db");
 
     if(!db.open()){
         qDebug() << "error";
@@ -32,7 +32,7 @@ bool DbManager::createTable()
     && query.exec("CREATE TABLE RMCSentence(RMCID INTEGER constraint RMCSentence_pk primary key autoincrement,FIXTIME TEXT,STATUS TEXT,LATITUDE NUMERIC,LATDIR TEXT,LONGITUDE NUMERIC,LONGDIR TEXT,SPEEDGROUND NUMERIC,COURSEGROUND NUMERIC,FIXDATE TEXT,MAGNETICVARIATION NUMERIC,MAGNETICVARIND TEXT,MODEINDUCATOR TEXT);")
     && query.exec("CREATE TABLE VTGSentence(VTGID INTEGER constraint VTGSentence_pk primary key autoincrement,TRACKDEGREE NUMERIC,TRACKREF TEXT,TRACKDEGREEMAG NUMERIC,TRACKDMAGREF TEXT,SPEEDINKNOTS NUMERIC,SPEEDINKM NUMERIC,STATUS int);")
     && query.exec("CREATE TABLE ZDASentence(ZDAID INTEGER constraint ZDASentence_pk primary key autoincrement,UTCTIME TEXT,DATE TEXT,LOCALZONEHOURS int,LOCALZONEMINUTES int);")
-    && query.exec("create table GpsDatum(DATAID INTEGER constraint GpsDatum_pk primary key autoincrement,GGAID  int references GGASentence,RMCID  int references RMCSentence,GLLID  int references GLLSentence,VTGID  int references VTGSentence,ZDAID  int references ZDASentence,GNSID  int references GNSSentence,HDTID  int references HDTSentence,GSAID  int references GSASentence,GSVID  int references GSVSentence);");
+    && query.exec("create table GpsDatum(DATAID INTEGER constraint GpsDatum_pk primary key autoincrement,GGAID  int references GGASentence,RMCID  int references RMCSentence,GLLID  int references GLLSentence,VTGID  int references VTGSentence,ZDAID  int references ZDASentence,GNSID  int references GNSSentence,HDTID  int references HDTSentence,GSAID  int references GSASentence,GSVID  int references GSVSentence, DateTime date);");
 }
 
 
@@ -92,8 +92,8 @@ void DbManager::prepareQuery(bool gga, bool rmc, bool gll,bool gns,bool gsa,bool
     QString selectQuery = selectQueryList.join(",");
 
     QString query = "";
-    query.append("insert into GPSDatum (" );
-    query.append(ids + ") values ("+selectQuery+");");
+    query.append("insert into GPSDatum (DateTime," );
+    query.append(ids + ") values (datetime('now'),"+selectQuery+");");
 
     qDebug() << query;
 

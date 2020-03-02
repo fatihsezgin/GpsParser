@@ -47,6 +47,8 @@ public:
     RMCSentence *getRmc() const;
     void setRmc(RMCSentence *value);*/
 
+    QSqlDatabase getDb() const;
+
 private:
     QSqlDatabase db;
 

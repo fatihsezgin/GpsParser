@@ -23,6 +23,7 @@
 #include <QStringLiteral>
 #include <QDesktopServices>
 #include <QDir>
+#include <QSqlQueryModel>
 #include "dbmanager.h"
 #include "ui_mainwindow.h"
 
@@ -51,6 +52,10 @@ private slots:
 
 
     void on_actionOpen_the_Doc_triggered();
+
+    void on_tabWidget_currentChanged(int index);
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;

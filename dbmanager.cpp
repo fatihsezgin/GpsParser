@@ -308,3 +308,8 @@ bool DbManager::insertTotalGSV(int totalMessageNumber)
     return false;
 
 }
+
+QSqlDatabase DbManager::getDb() const
+{
+    return db;
+}

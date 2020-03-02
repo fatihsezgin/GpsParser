@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     dbManager.open();
     qDebug() << "create table " <<dbManager.createTable();
@@ -369,4 +370,51 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionOpen_the_Doc_triggered()
 {
     QDesktopServices::openUrl(QUrl(QDir::currentPath()+"/documentation.pdf"));
+}
+
+
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if(index == 1){
+        QSqlQueryModel *model = new QSqlQueryModel();
+
+        QSqlQuery *query = new QSqlQuery(dbManager.getDb());
+
+        query->prepare("select * from GPSDatum");
+
+        query->exec();
+        model->setQuery(*query);
+        ui->tableView->setModel(model);
+    }
+}
+
+void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+{
+
+    QItemSelectionModel *select = ui->tableView->selectionModel();
+
+    QString dataid = select->selectedRows(0).value(0).data().toString();
+    QString ggaid = select->selectedRows(1).value(0).data().toString();
+    QString rmcid = select->selectedRows(2).value(0).data().toString();
+    QString gllid = select->selectedRows(3).value(0).data().toString();
+    QString vtgid = select->selectedRows(4).value(0).data().toString();
+    QString zdaid = select->selectedRows(5).value(0).data().toString();
+    QString gnsid = select->selectedRows(6).value(0).data().toString();
+    QString hdtid = select->selectedRows(7).value(0).data().toString();
+    QString gsaid = select->selectedRows(8).value(0).data().toString();
+    QString gsvid = select->selectedRows(9).value(0).data().toString();
+
+
+    qDebug () << dataid  << ggaid << rmcid << gllid << vtgid << zdaid << gnsid << hdtid << gsaid << gsvid;
+
+
+
+    /*qDebug()<<select->selectedRows(0).value(0).data().toString();
+    qDebug()<<select->selectedRows(1).value(0).data().toString();
+    qDebug()<<select->selectedRows(2).value(0).data().toString();
+    qDebug()<<select->selectedRows(3).value(0).data().toString();*/
+
+
+
 }

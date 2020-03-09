@@ -34,6 +34,11 @@ MainWindow::MainWindow(QWidget *parent)
     btnSendCommand = ui->btnSendCommand;
     lEditCommand = ui->lEditCommand;
 
+    scrollArea = ui->scrollArea;
+    sAreaContent = ui->sAreaContent;
+    detailVertical = ui->detailVertical;
+
+
     initCheckBoxes();
 
     serial = new QSerialPort(this);
@@ -184,7 +189,7 @@ void MainWindow::processData(QString data)
         }
     }
 
-    qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
+    //qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
     dbManager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
     plainText->ensureCursorVisible();
 }
@@ -365,14 +370,10 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
 void MainWindow::on_actionOpen_the_Doc_triggered()
 {
     QDesktopServices::openUrl(QUrl(QDir::currentPath()+"/documentation.pdf"));
 }
-
-
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
@@ -389,32 +390,92 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     }
 }
 
+
+
+/**
+ *  @todo seçilen item'ın datalarına göre queryler yazılacak ve query boş dönmediyse her sentence ait bir groupbox oluşturulup @gui detailVertical
+ * adlı vertical layout a append edilecek
+ *
+ * @todo
+      rmc de bazılarında 12 part var bazılarında 11 gps'i takarak dene
+*/
+
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
+    clearDetailLayout();
 
     QItemSelectionModel *select = ui->tableView->selectionModel();
 
-    QString dataid = select->selectedRows(0).value(0).data().toString();
-    QString ggaid = select->selectedRows(1).value(0).data().toString();
-    QString rmcid = select->selectedRows(2).value(0).data().toString();
-    QString gllid = select->selectedRows(3).value(0).data().toString();
-    QString vtgid = select->selectedRows(4).value(0).data().toString();
-    QString zdaid = select->selectedRows(5).value(0).data().toString();
-    QString gnsid = select->selectedRows(6).value(0).data().toString();
-    QString hdtid = select->selectedRows(7).value(0).data().toString();
-    QString gsaid = select->selectedRows(8).value(0).data().toString();
-    QString gsvid = select->selectedRows(9).value(0).data().toString();
-
-
-    qDebug () << dataid  << ggaid << rmcid << gllid << vtgid << zdaid << gnsid << hdtid << gsaid << gsvid;
-
-
-
-    /*qDebug()<<select->selectedRows(0).value(0).data().toString();
-    qDebug()<<select->selectedRows(1).value(0).data().toString();
-    qDebug()<<select->selectedRows(2).value(0).data().toString();
-    qDebug()<<select->selectedRows(3).value(0).data().toString();*/
+    /*Starts with 1 because the first column in the table is DATAID **/
+    for(int i= 1 ; i <= 2 ; i++ ){
+        QString headerName = ui->tableView->model()->headerData(i,Qt::Horizontal).toString().mid(0,3);
+        QString id = select->selectedRows(i).value(0).data().toString();
+        qDebug() << "header name : " <<  headerName << "   id :" << id;
+        QList<QString> list = dbManager.getSentenceInfo(headerName,id);
+        createGroupBox(headerName,list);
+    }
 
 
 
 }
+
+void MainWindow::clearDetailLayout()
+{
+
+    QLayoutItem *child;
+    while((child=ui->detailVertical->takeAt(0))!= nullptr){
+        delete child->widget();
+    }
+}
+
+void MainWindow::createGroupBox(QString title, QList<QString> list)
+{
+
+    //QVBoxLayout *vbox = new QVBoxLayout();
+    sAreaContent->setLayout(detailVertical);
+
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable( true );
+    scrollArea->setWidget( sAreaContent);
+
+    QGroupBox *groupBox = new QGroupBox();
+    groupBox->setTitle(title);
+    QFormLayout *formLayout = new QFormLayout();
+
+    if(title.compare("GGA")==0){
+        formLayout->addRow(new QLabel("FixTime"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Latitude"), new QLabel(list[2] + " " + list[3]));
+        formLayout->addRow(new QLabel("Longitude"), new QLabel(list[4] + " " + list[5]));
+        formLayout->addRow(new QLabel("Fixed Quality"), new QLabel(list[6]));
+        formLayout->addRow(new QLabel("Satallite Number"), new QLabel(list[7]));
+        formLayout->addRow(new QLabel("HDOP"), new QLabel(list[8]));
+        formLayout->addRow(new QLabel("Altitude"), new QLabel(list[9]));
+        formLayout->addRow(new QLabel("Height of Geoid"), new QLabel(list[10]));
+    }else if(title.compare("RMC") == 0){
+        formLayout->addRow(new QLabel("FixTime"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Status"), new QLabel(list[2]));
+        formLayout->addRow(new QLabel("Latitude"), new QLabel(list[3] + " " + list[4]));
+        formLayout->addRow(new QLabel("Longitude"), new QLabel(list[5] + " " + list[6]));
+        formLayout->addRow(new QLabel("Speed Over Ground"), new QLabel(list[7]));
+        formLayout->addRow(new QLabel("Course Over Ground"), new QLabel(list[8]));
+        formLayout->addRow(new QLabel("Date"), new QLabel(list[9]));
+        formLayout->addRow(new QLabel("Magnetic Variation"), new QLabel(list[10] +" " + list[11]));
+    }else if(title.compare("GLL") ==0){
+        formLayout->addRow(new QLabel("Latitude"), new QLabel(list[1] + " " + list[2]));
+        formLayout->addRow(new QLabel("Longitude"), new QLabel(list[3] + " " + list[4]));
+        formLayout->addRow(new QLabel("FixTime"), new QLabel(list[5]));
+        formLayout->addRow(new QLabel("Status"), new QLabel(list[6]));
+    }
+
+    groupBox->setLayout(formLayout);
+
+    detailVertical->addWidget(groupBox);
+
+}
+
+void MainWindow::createFormLayout(QString headerName, QList<QString> list)
+{
+    QFormLayout *formLayout = new QFormLayout();
+}
+

@@ -309,6 +309,85 @@ bool DbManager::insertTotalGSV(int totalMessageNumber)
 
 }
 
+
+
+QList<QString> DbManager::getGGAById(QString ggaid)
+{
+    QList<QString>  gga;
+    QSqlQuery query (db);
+
+    query.exec("select * from GGASentence where GGAID="+ggaid);
+    if(query.next()){
+        for(int i = 0 ; i < 11 ; i++){ // since there are 10 colums in tge GGASentence
+            gga << query.value(i).toString();
+        }
+    }
+    for( QString a : gga){
+        qDebug() << a;
+    }
+
+    return gga;
+
+}
+
+QList<QString> DbManager::getRMCById(QString rmcid)
+{
+    QList<QString>  rmc;
+    QSqlQuery query (db);
+
+    query.exec("select * from RMCSentence where RMCID="+rmcid);
+
+    if(query.next()){
+        for(int i = 0 ; i < 13 ; i++){ // since there are 11 colums in tge GGASentence
+            rmc << query.value(i).toString();
+        }
+    }
+    for( QString a : rmc){
+        qDebug() << a;
+    }
+    return rmc;
+}
+
+QList<QString> DbManager::getGLLById(QString gllid)
+{
+    QList<QString>  rmc;
+    QSqlQuery query (db);
+
+    query.exec("select * from RMCSentence where RMCID="+gllid);
+    query.record().count();
+    if(query.next()){
+        for(int i = 0 ; i < 13 ; i++){ // since there are 11 colums in tge GGASentence
+            rmc << query.value(i).toString();
+        }
+    }
+    for( QString a : rmc){
+        qDebug() << a;
+    }
+    return rmc;
+}
+
+/** @param SentenceType is the identificator for NMEA type
+ * @param sentenceId for the get all records that is related with that id.
+**/
+
+QList<QString> DbManager::getSentenceInfo(QString sentenceType, QString sentenceID)
+{
+    QList<QString> list;
+    QSqlQuery query(db);
+
+    query.exec("select * from " + sentenceType+"Sentence where " + sentenceType+"ID ="+ sentenceID);
+
+    if(query.next()){
+        for(int i =0 ; i <query.record().count(); i++ )
+            list << query.value(i).toString();
+    }
+
+    for( QString a : list){
+        qDebug() << a;
+    }
+    return list;
+}
+
 QSqlDatabase DbManager::getDb() const
 {
     return db;

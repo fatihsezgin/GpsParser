@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QSqlDriver>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QDir>
 #include <QList>
 #include <QDebug>
@@ -41,6 +42,12 @@ public:
     bool insertGSA(GSASentence *gsa);
     bool insertGSV(GSVSentence *gsv);
     bool insertTotalGSV(int totalMessageNumber);
+
+    QList<QString> getGGAById(QString ggaid);
+    QList<QString> getRMCById(QString rmcid);
+    QList<QString> getGLLById(QString gllid);
+    QList<QString> getSentenceInfo(QString tableName,QString sentenceID);
+
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
 

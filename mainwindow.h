@@ -22,6 +22,7 @@
 #include <gsvsentence.h>
 #include <QStringLiteral>
 #include <QDesktopServices>
+#include <QScrollArea>
 #include <QDir>
 #include <QSqlQueryModel>
 #include "dbmanager.h"
@@ -57,6 +58,13 @@ private slots:
 
     void on_tableView_doubleClicked(const QModelIndex &index);
 
+    void clearDetailLayout();
+
+    void createGroupBox(QString title,QList<QString> list);
+
+    void createFormLayout(QString headerName, QList<QString> list);
+
+
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
@@ -65,6 +73,9 @@ private:
     QComboBox *cboxPortName,*cboxBaudRate,*cboxDataBits, *cboxParity,*cboxStopBits,*cboxFlowControl;
     QPushButton *btnOpenPort, *btnClosePort,*btnSendCommand;
     DbManager dbManager;
+    QScrollArea *scrollArea;
+    QWidget *sAreaContent;
+    QVBoxLayout *detailVertical;
 
 
 };

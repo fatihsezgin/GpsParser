@@ -405,18 +405,16 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
     clearDetailLayout();
 
     QItemSelectionModel *select = ui->tableView->selectionModel();
-
     /*Starts with 1 because the first column in the table is DATAID **/
-    for(int i= 1 ; i <= 2 ; i++ ){
+    for(int i= 1 ; i <= 9 ; i++ ){
         QString headerName = ui->tableView->model()->headerData(i,Qt::Horizontal).toString().mid(0,3);
         QString id = select->selectedRows(i).value(0).data().toString();
         qDebug() << "header name : " <<  headerName << "   id :" << id;
-        QList<QString> list = dbManager.getSentenceInfo(headerName,id);
-        createGroupBox(headerName,list);
+        if(!id.isNull()){
+            QList<QString> list = dbManager.getSentenceInfo(headerName,id);
+            createGroupBox(headerName,list);
+        }
     }
-
-
-
 }
 
 void MainWindow::clearDetailLayout()
@@ -466,10 +464,42 @@ void MainWindow::createGroupBox(QString title, QList<QString> list)
         formLayout->addRow(new QLabel("Longitude"), new QLabel(list[3] + " " + list[4]));
         formLayout->addRow(new QLabel("FixTime"), new QLabel(list[5]));
         formLayout->addRow(new QLabel("Status"), new QLabel(list[6]));
+    }else if(title.compare("VTG") ==0){
+        formLayout->addRow(new QLabel("Track / Degress"), new QLabel(list[1] + " " + list[2]));
+        formLayout->addRow(new QLabel("Track / Magnetic"), new QLabel(list[3] + " " + "M"));
+        formLayout->addRow(new QLabel("Speed "), new QLabel(list[5] + " " + "N"));
+        formLayout->addRow(new QLabel("Speed"), new QLabel(list[6] + " "+ "KM"));
+        formLayout->addRow(new QLabel("Status"), new QLabel(list[7]));
+    }else if(title.compare("ZDA") ==0){
+        formLayout->addRow(new QLabel("UTC"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Date"), new QLabel(list[2]));
+        formLayout->addRow(new QLabel("Local Zone Hours "), new QLabel(list[3]));
+        formLayout->addRow(new QLabel("Local Zone Minutes "), new QLabel(list[4]));
+    }else if(title.compare("GNS") ==0){
+        formLayout->addRow(new QLabel("FixTime"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Latitude"), new QLabel(list[2] + " " + list[3]));
+        formLayout->addRow(new QLabel("Longitude"), new QLabel(list[4] + " " + list[5]));
+        formLayout->addRow(new QLabel("Status"), new QLabel(list[6]));
+        formLayout->addRow(new QLabel("Number of Satallites"), new QLabel(list[7]));
+        formLayout->addRow(new QLabel("HDOP"), new QLabel(list[8]));
+        formLayout->addRow(new QLabel("Ortometric Height"), new QLabel(list[9]));
+        formLayout->addRow(new QLabel("Geoidal Separation"), new QLabel(list[10]));
+        formLayout->addRow(new QLabel("Age of Differential Data"), new QLabel(list[11]));
+        formLayout->addRow(new QLabel("Reference Station ID"), new QLabel(list[12]));
+    }else if(title.compare("HDT") ==0){
+        formLayout->addRow(new QLabel("Heading in  Degrees"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Relative"), new QLabel(list[2]));
+    }else if(title.compare("GSA") ==0){
+        formLayout->addRow(new QLabel("Mode"), new QLabel(list[1]));
+        formLayout->addRow(new QLabel("Fix"), new QLabel(list[2]));
+        formLayout->addRow(new QLabel("PDOP"), new QLabel(list[3]));
+        formLayout->addRow(new QLabel("HDOP"), new QLabel(list[4]));
+        formLayout->addRow(new QLabel("VDOP"), new QLabel(list[5]));
+        for(int i = 8 ; i <= 19 ; i++)
+            formLayout->addRow(new QLabel("Satallite "+QString::number(i-7)), new QLabel(list[i]));
     }
 
     groupBox->setLayout(formLayout);
-
     detailVertical->addWidget(groupBox);
 
 }

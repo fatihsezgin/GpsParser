@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>741</width>
-    <height>559</height>
+    <width>1011</width>
+    <height>752</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -229,8 +229,8 @@ color : rgb(211, 215, 207)
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>344</width>
-               <height>444</height>
+               <width>479</width>
+               <height>637</height>
               </rect>
              </property>
              <widget class="QWidget" name="verticalLayoutWidget">
@@ -260,7 +260,7 @@ color : rgb(211, 215, 207)
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>741</width>
+     <width>1011</width>
      <height>22</height>
     </rect>
    </property>

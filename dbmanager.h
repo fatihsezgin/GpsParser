@@ -46,7 +46,9 @@ public:
     QList<QString> getGGAById(QString ggaid);
     QList<QString> getRMCById(QString rmcid);
     QList<QString> getGLLById(QString gllid);
+
     QList<QString> getSentenceInfo(QString tableName,QString sentenceID);
+    QList<QString> getSentenceInfoGSA(QString sentenceID);
 
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);

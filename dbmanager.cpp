@@ -373,6 +373,12 @@ QList<QString> DbManager::getGLLById(QString gllid)
 QList<QString> DbManager::getSentenceInfo(QString sentenceType, QString sentenceID)
 {
     QList<QString> list;
+
+    if(sentenceType.compare("GSA")==0){
+        list = getSentenceInfoGSA(sentenceID);
+        return list;
+    }
+
     QSqlQuery query(db);
 
     query.exec("select * from " + sentenceType+"Sentence where " + sentenceType+"ID ="+ sentenceID);
@@ -382,6 +388,22 @@ QList<QString> DbManager::getSentenceInfo(QString sentenceType, QString sentence
             list << query.value(i).toString();
     }
 
+    for( QString a : list){
+        qDebug() << a;
+    }
+    return list;
+}
+
+QList<QString> DbManager::getSentenceInfoGSA(QString sentenceID)
+{
+    QList<QString> list;
+    QSqlQuery query(db);
+    query.exec("Select * from GSASentence inner join GSASataList on GSASentence.LISTID = GSASataList.LISTID where GSAID ="+sentenceID);
+
+    if(query.next()){
+        for(int i =0 ; i <query.record().count(); i++ )
+            list << query.value(i).toString();
+    }
     for( QString a : list){
         qDebug() << a;
     }

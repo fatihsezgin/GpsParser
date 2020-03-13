@@ -377,6 +377,9 @@ QList<QString> DbManager::getSentenceInfo(QString sentenceType, QString sentence
     if(sentenceType.compare("GSA")==0){
         list = getSentenceInfoGSA(sentenceID);
         return list;
+    }else if(sentenceType.compare("GSV") ==0){
+        list = getSentenceInfoGSV(sentenceID);
+        return list;
     }
 
     QSqlQuery query(db);
@@ -408,6 +411,56 @@ QList<QString> DbManager::getSentenceInfoGSA(QString sentenceID)
         qDebug() << a;
     }
     return list;
+}
+
+QList<QString> DbManager::getSentenceInfoGSV(QString sentenceID)
+{
+    QList<QString> sentenceList;//to store the records that is returned from GSVSentence table;
+    QList<QString> messageList;//to store the records that is returned from GSVMessage table;
+    QList<QString> detailList;
+    QSqlQuery query(db);
+    qDebug() << query.exec("Select * from GSVSentence where GSVID =" + sentenceID+";");
+
+    if(query.next()){
+        for(int i = 0 ; i < query.record().count();i++)
+            sentenceList << query.value(i).toString();
+    }
+
+    QSqlQuery q(db);
+
+    for(int i = 1 ; i < sentenceList.size();i++){
+        q.exec("Select * from GSVMessage where GSVMESSAGEID =" + sentenceList.at(i) +";");
+        if(q.next()){
+            for(int i = 0 ; i < q.record().count();i++)
+                messageList << q.value(i).toString();
+        }
+    }
+
+    qDebug() << messageList.join(",");
+
+    int i = 4;
+    int j = 0;
+    while(i < messageList.size()){
+        while( j < 4){
+            QSqlQuery query(db);
+            query.exec("Select * from GSVDetail where DETAILID ="+ messageList.at(i)+";");
+            if(query.next()){
+                for(int i = 0 ; i < query.record().count() ; i++){
+                    detailList << query.value(i).toString();
+                }
+            }
+            i++;
+            j++;
+        }
+        j=0;
+        i+=4;
+    }
+
+    QString a = detailList.join(",");
+    qDebug() << a;
+
+    return detailList;
+
 }
 
 QSqlDatabase DbManager::getDb() const

@@ -22,7 +22,7 @@
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Connection</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
@@ -160,7 +160,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lEditCommand"/>
+               <widget class="QLineEdit" name="lEditCommand">
+                <property name="placeholderText">
+                 <string>Do not enter checksum and &lt;CR&gt;&lt;LF&gt;</string>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnSendCommand">
@@ -204,7 +208,7 @@ color : rgb(211, 215, 207)
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>Database</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>

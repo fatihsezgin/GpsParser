@@ -53,16 +53,11 @@ private slots:
 
 
     void on_actionOpen_the_Doc_triggered();
-
     void on_tabWidget_currentChanged(int index);
-
     void on_tableView_doubleClicked(const QModelIndex &index);
-
     void clearDetailLayout();
-
     void createGroupBox(QString title,QList<QString> list);
 
-    void createFormLayout(QString headerName, QList<QString> list);
 
 
 private:

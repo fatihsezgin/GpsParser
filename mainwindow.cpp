@@ -17,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     dbManager.open();
     qDebug() << "create table " <<dbManager.createTable();
@@ -173,11 +172,13 @@ void MainWindow::processData(QString data)
                                  }
                                  GSVSentence s(parts[0],parts[1],parts[2],parts[3],list);
                                  dbManager.insertGSV(&s);
+                                 plainText->insertPlainText(s.toString());
                              }
                              if(totalMessage == currentMessage){
                                  qDebug() << "insertTotal"<< dbManager.insertTotalGSV(totalMessage);
                              }
                          }
+
                     }else if(parts[0].contains("PMTK")){
                             PMTKSentence s (parts,this);
                     }
@@ -189,7 +190,6 @@ void MainWindow::processData(QString data)
         }
     }
 
-    //qDebug() << "gga" << gga << "rmc " << rmc << "gll" <<gll <<"gns"<<gns <<"gsa "<<gsa<<" gsv"<<gsv<<" hdt"<<hdt<<"vtg"<<vtg<<"zda"<<zda;
     dbManager.prepareQuery(gga,rmc,gll,gns,gsa,gsv,hdt,vtg,zda);
     plainText->ensureCursorVisible();
 }
@@ -284,17 +284,13 @@ void MainWindow::sendCommand()
         QMessageBox::information(this,"Wrong Command","Only PMTK sentences are supported"); //All commands should be started with P | p
         //lEditCommand->clear();
     }
-    //qDebug() << cmdFromGUI;
-    //char *cmdChar = cmdFromGUI.toUtf8().data();
+
     int checksum = Helper::calculateCheckSum(cmdFromGUI.toUtf8().data()); // for calculating the checksum checksum is converted into char *;
     QString hex = QString("%1").arg(checksum,2,16,QLatin1Char('0'));//checksum returns an integer but in the sentence we need as a hex number.
 
 
     QString cmdToSend= "";
-    cmdToSend.append("$");
-    cmdToSend.append(cmdFromGUI);
-    cmdToSend.append("*");
-    cmdToSend.append(hex);
+    cmdToSend.append("$"+cmdFromGUI+"*"+hex);
     cmdToSend.append(QChar(13));// <CR>
     cmdToSend.append(QChar(10));// <LF>
 
@@ -334,14 +330,11 @@ void MainWindow::disableSerialPortSettings()
 }
 
 
-
 static QString strData;
 
 void MainWindow::serialReceived()
 {
 
-    //qDebug() << __PRETTY_FUNCTION__;
-    //qDebug() << "received";
     qint64 bufferSize = serial->bytesAvailable();
     if(bufferSize > 0){
         QString data = QString(serial->readAll());
@@ -439,6 +432,7 @@ void MainWindow::createGroupBox(QString title, QList<QString> list)
 
     QGroupBox *groupBox = new QGroupBox();
     groupBox->setTitle(title);
+
     QFormLayout *formLayout = new QFormLayout();
 
     if(title.compare("GGA")==0){
@@ -497,15 +491,20 @@ void MainWindow::createGroupBox(QString title, QList<QString> list)
         formLayout->addRow(new QLabel("VDOP"), new QLabel(list[5]));
         for(int i = 8 ; i <= 19 ; i++)
             formLayout->addRow(new QLabel("Satallite "+QString::number(i-7)), new QLabel(list[i]));
+    }else if(title.compare("GSV") ==0){
+        int j =1;
+        for(int i = 1; i < list.size();i+=5){
+            formLayout->addRow(new QLabel("Satallite "+QString::number(j++)));
+            formLayout->addRow(new QLabel("PRNNO "), new QLabel(list[i]));
+            formLayout->addRow(new QLabel("Elevation "), new QLabel(list[i+1]));
+            formLayout->addRow(new QLabel("Azimuth "), new QLabel(list[i+2]));
+            formLayout->addRow(new QLabel("SNR "), new QLabel(list[i+3]));
+
+        }
     }
 
     groupBox->setLayout(formLayout);
     detailVertical->addWidget(groupBox);
-
 }
 
-void MainWindow::createFormLayout(QString headerName, QList<QString> list)
-{
-    QFormLayout *formLayout = new QFormLayout();
-}
 

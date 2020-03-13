@@ -49,6 +49,7 @@ public:
 
     QList<QString> getSentenceInfo(QString tableName,QString sentenceID);
     QList<QString> getSentenceInfoGSA(QString sentenceID);
+    QList<QString> getSentenceInfoGSV(QString sentenceID);
 
     /*GGASentence *getGga() const;
     void setGga(GGASentence *value);
